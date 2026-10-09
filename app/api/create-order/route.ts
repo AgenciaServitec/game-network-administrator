@@ -45,6 +45,7 @@ export async function POST(req: NextRequest) {
                     }
                 ],
                 external_reference: order.id,
+                notification_url: 'https://abc-meetings-lucky-half.trycloudflare.com/api/webhooks/mercadopago',
                 back_urls: {
                     success: `https://tudominio.com/success`,
                     failure: `https://tudominio.com/failure`,

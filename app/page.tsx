@@ -1,11 +1,9 @@
-// app/page.tsx
 'use client';
 
 import { useState } from 'react';
 import { Search, CheckCircle2, XCircle, Loader2, Diamond } from 'lucide-react';
-import { useCartStore } from '@/store/useCartStore'; // Ajusta la ruta si es necesario
+import { useCartStore } from '@/store/useCartStore';
 
-// Simulamos los productos que vimos en tu panel de Apigames
 const PACKAGES = [
   { code: 'FF5', name: '5 Diamantes', price: 1.50 },
   { code: 'FF10', name: '10 Diamantes', price: 2.80 },
