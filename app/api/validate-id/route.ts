@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+// @ts-ignore
 import crypto from 'crypto-js';
 
 export async function POST(req: NextRequest) {
