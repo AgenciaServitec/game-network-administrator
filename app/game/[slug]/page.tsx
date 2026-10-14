@@ -174,7 +174,7 @@ export default function GamePage() {
                                             value={localPlayerId}
                                             onChange={(e) => setLocalPlayerId(e.target.value)}
                                             placeholder=""
-                                            className="w-full pl-5 pr-12 py-4 bg-background border-2 border-border outline-none transition-colors text-foreground font-black text-lg uppercase focus:border-primary"
+                                            className="w-full pl-5 pr-12 py-4 bg-background border-2 border-border outline-none transition-colors text-foreground font-black text-lg uppercase"
                                             disabled={loading}
                                         />
                                         <Search className="absolute right-4 top-4.5 text-muted w-6 h-6" />
