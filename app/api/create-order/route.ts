@@ -45,11 +45,11 @@ export async function POST(req: NextRequest) {
                     }
                 ],
                 external_reference: order.id,
-                notification_url: 'https://grab-cds-duties-scholarship.trycloudflare.com/api/webhooks/mercadopago',
+                notification_url: 'https://consultants-felt-keeping-handy.trycloudflare.com/api/webhooks/mercadopago',
                 back_urls: {
-                    success: `https://grab-cds-duties-scholarship.trycloudflare.com/status/success`,
-                    failure: `https://grab-cds-duties-scholarship.trycloudflare.com/status/failure`,
-                    pending: `https://grab-cds-duties-scholarship.trycloudflare.com/status/pending`,
+                    success: `https://consultants-felt-keeping-handy.trycloudflare.com/status/success`,
+                    failure: `https://consultants-felt-keeping-handy.trycloudflare.com/status/failure`,
+                    pending: `https://consultants-felt-keeping-handy.trycloudflare.com/status/pending`,
                 },
                 auto_return: 'approved',
             }

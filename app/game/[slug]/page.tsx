@@ -118,12 +118,11 @@ export default function GamePage() {
         }
     };
 
-    // LÓGICA DE FILTRADO Y ORDENAMIENTO
     const isMembership = (code: string) => code.includes('weekly') || code.includes('monthly') || code.includes('pass');
 
     const diamondsPackages = packages
         .filter(pkg => !isMembership(pkg.code))
-        .sort((a, b) => a.price - b.price); // Ordenamos de menor a mayor precio
+        .sort((a, b) => a.price - b.price);
 
     const membershipsPackages = packages
         .filter(pkg => isMembership(pkg.code))
@@ -155,7 +154,6 @@ export default function GamePage() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-                    {/* COLUMNA IZQUIERDA: VALIDACIÓN */}
                     <div className="lg:col-span-5 space-y-6">
                         <Card className="border-2 border-border p-8 bg-card">
                             <h2 className="text-2xl font-black text-foreground uppercase tracking-tighter mb-8 flex items-center gap-4">

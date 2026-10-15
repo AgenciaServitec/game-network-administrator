@@ -1,3 +1,5 @@
+'use client';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Gamepad2 } from 'lucide-react';
 
@@ -10,17 +12,51 @@ const games = [
   }
 ];
 
+const heroImages = [
+  '/hero-ff.png',
+  '/hero-2.png',
+  '/hero-3.png'
+];
+
 export default function Home() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
       <div className="w-full bg-background selection:bg-primary selection:text-black">
 
-        <section className="relative w-full border-b-2 border-border overflow-hidden flex flex-col justify-end">
+        <section className="relative w-full border-b-2 border-border overflow-hidden flex flex-col justify-end min-h-[90vh] lg:min-h-0">
+
+          <div className="absolute inset-0 z-0 pointer-events-none hidden lg:block">
+            <div
+                className="absolute right-0 top-0 w-[56%] h-full bg-border/40 -translate-x-2"
+                style={{ clipPath: 'polygon(30% 0%, 100% 0%, 100% 100%, 0% 100%, 25% 55%, 10% 55%)' }}
+            />
+            <div
+                className="absolute right-0 top-0 w-[55%] h-full bg-primary"
+                style={{ clipPath: 'polygon(30% 0%, 100% 0%, 100% 100%, 0% 100%, 25% 55%, 10% 55%)' }}
+            />
+          </div>
+
+          <div className="absolute inset-0 z-0 pointer-events-none lg:hidden">
+            <div
+                className="absolute bottom-0 w-full h-[65%] bg-primary"
+                style={{ clipPath: 'polygon(0 30%, 35% 10%, 25% 40%, 100% 15%, 100% 100%, 0 100%)' }}
+            />
+          </div>
+
           <div className="max-w-7xl mx-auto px-4 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-end relative z-10 pt-20 lg:pt-32">
 
-            <div className="flex flex-col items-start text-left pb-20 lg:pb-32">
-              <h1 className="text-6xl md:text-8xl font-black text-foreground uppercase tracking-tighter leading-[0.85] mb-6">
+            <div className="flex flex-col items-start text-left pb-10 lg:pb-32 relative z-20">
+              <h1 className="text-6xl md:text-8xl font-black text-foreground uppercase tracking-tighter leading-[0.85] mb-6 drop-shadow-lg transition-all">
                 DIAMANTES <br />
-                <span className="text-primary">AL INSTANTE</span>
+                <span className="text-primary lg:text-foreground">AL INSTANTE</span>
               </h1>
 
               <p className="text-muted text-lg md:text-2xl font-medium max-w-lg mb-10 leading-snug">
@@ -29,24 +65,32 @@ export default function Home() {
 
               <a
                   href="#catalogo"
-                  className="group flex items-center justify-center gap-4 bg-primary text-black font-black text-lg md:text-xl px-10 py-5 uppercase tracking-widest hover:bg-white transition-colors duration-200"
+                  className="group flex items-center justify-center gap-4 bg-primary text-black font-black text-lg md:text-xl px-10 py-5 uppercase tracking-widest hover:bg-white transition-colors duration-200 shadow-[8px_8px_0px_rgba(255,255,255,0.1)] hover:shadow-none hover:translate-y-1 hover:translate-x-1"
               >
                 Recargar Ahora
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
               </a>
             </div>
 
-            <div className="relative w-full h-100 lg:h-162.5 flex items-end justify-center lg:justify-end">
-              <img
-                  src="/hero-ff.png"
-                  alt="Free Fire Hero"
-                  className="object-contain object-bottom w-full h-full drop-shadow-[0_0_40px_rgba(250,204,21,0.15)] block"
-              />
+            <div className="relative w-full h-112.5 lg:h-162.5 flex flex-col items-center lg:items-end justify-end">
+
+              <div className="absolute inset-0 w-full h-full">
+                {heroImages.map((src, index) => (
+                    <img
+                        key={src}
+                        src={src}
+                        alt={`Hero Image ${index + 1}`}
+                        className={`absolute bottom-0 left-0 w-full h-full object-contain object-bottom drop-shadow-[0_0_40px_rgba(0,0,0,0.5)] transition-opacity duration-700 ease-in-out ${
+                            currentSlide === index ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                        }`}
+                    />
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
-        <section id="catalogo" className="max-w-7xl mx-auto px-4 py-32">
+        <section id="catalogo" className="max-w-7xl mx-auto px-4 py-32 relative z-10">
           <div className="mb-16">
             <h2 className="text-4xl md:text-6xl font-black text-foreground uppercase tracking-tighter">
               SELECCIONA <br />
@@ -58,17 +102,19 @@ export default function Home() {
 
             {games.map((game) => (
                 <Link key={game.id} href={`/game/${game.id}`} className="block h-full">
-                  <div className="group h-full flex flex-col bg-card border-2 border-border p-8 transition-all duration-200 hover:bg-primary hover:border-primary cursor-pointer">
+                  <div className="group h-full flex flex-col bg-card border-2 border-border p-8 transition-all duration-200 hover:bg-primary hover:border-primary cursor-pointer relative overflow-hidden">
+
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-black/10 -translate-y-8 translate-x-8 rotate-45 group-hover:bg-black/20 transition-colors" />
 
                     <div className="w-full flex items-center justify-start mb-auto">
                       <img
                           src={game.image}
                           alt={game.name}
-                          className="w-52 md:w-60 object-contain drop-shadow-xl group-hover:scale-110 group-hover:brightness-0 transition-all duration-300"
+                          className="w-52 md:w-60 object-contain drop-shadow-xl group-hover:scale-110 group-hover:brightness-0 transition-all duration-300 relative z-10"
                       />
                     </div>
 
-                    <div className="mt-12">
+                    <div className="mt-12 relative z-10">
                       <p className="text-muted group-hover:text-black/70 text-sm font-bold uppercase tracking-widest mb-2 transition-colors duration-200">
                         {game.publisher}
                       </p>
@@ -81,7 +127,7 @@ export default function Home() {
                 </Link>
             ))}
 
-            <div className="h-full min-h-75 flex flex-col bg-transparent border-2 border-dashed border-border p-8 justify-between opacity-50 grayscale">
+            <div className="h-full min-h-[300px] flex flex-col bg-transparent border-2 border-dashed border-border p-8 justify-between opacity-50 grayscale">
               <Gamepad2 className="w-16 h-16 text-muted mb-8" />
               <div className="mt-8">
                 <p className="text-muted text-sm font-bold uppercase tracking-widest mb-2">
