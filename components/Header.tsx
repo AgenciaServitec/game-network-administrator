@@ -3,34 +3,37 @@ import { Gamepad2 } from 'lucide-react';
 
 export default function Header() {
     return (
-        <header className="bg-background border-b-2 border-border sticky top-0 z-50">
-            <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+        <header className="bg-background border-b-4 border-border sticky top-0 z-50">
+            <div className="max-w-7xl mx-auto px-4 h-24 flex items-center justify-between">
 
-                <Link href="/" className="flex items-center gap-2 group">
-                    <Gamepad2 className="w-8 h-8 text-primary" />
-                    <span className="text-2xl font-black text-foreground tracking-tighter uppercase">
-            STORE<span className="text-primary">GAMER</span>
-          </span>
+                {/* LOGO CON EFECTO PSEUDO-3D */}
+                <Link href="/" className="flex items-center gap-4 group">
+                    <div className="bg-primary text-black p-2 border-4 border-black shadow-[4px_4px_0px_#000] group-hover:shadow-none group-hover:translate-x-1 group-hover:translate-y-1 transition-all">
+                        <Gamepad2 className="w-6 h-6 md:w-8 md:h-8" />
+                    </div>
+                    <span className="text-3xl md:text-4xl font-black text-foreground tracking-tighter uppercase mt-1">
+                        IM <span className="text-primary">STORES</span>
+                    </span>
                 </Link>
 
-                <nav className="hidden md:flex gap-2">
+                <nav className="hidden md:flex items-center gap-1">
                     <Link
                         href="/"
-                        className="text-xs font-black text-foreground uppercase tracking-widest px-4 py-2 hover:bg-primary hover:text-black transition-colors"
+                        className="text-xs font-black text-foreground uppercase tracking-widest px-5 py-3 border-4 border-transparent hover:border-black hover:bg-primary hover:text-black hover:-translate-y-1 hover:shadow-[4px_4px_0px_#000] transition-all"
                     >
-                        Inicio
+                        INICIO
                     </Link>
                     <Link
                         href="/#catalogo"
-                        className="text-xs font-black text-foreground uppercase tracking-widest px-4 py-2 hover:bg-primary hover:text-black transition-colors"
+                        className="text-xs font-black text-foreground uppercase tracking-widest px-5 py-3 border-4 border-transparent hover:border-black hover:bg-primary hover:text-black hover:-translate-y-1 hover:shadow-[4px_4px_0px_#000] transition-all"
                     >
-                        Catálogo
+                        CATÁLOGO
                     </Link>
                     <Link
                         href="#"
-                        className="text-xs font-black text-foreground uppercase tracking-widest px-4 py-2 hover:bg-primary hover:text-black transition-colors"
+                        className="text-xs font-black text-foreground uppercase tracking-widest px-5 py-3 border-4 border-transparent hover:border-black hover:bg-primary hover:text-black hover:-translate-y-1 hover:shadow-[4px_4px_0px_#000] transition-all"
                     >
-                        Soporte
+                        SOPORTE
                     </Link>
                 </nav>
             </div>

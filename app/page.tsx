@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Gamepad2 } from 'lucide-react';
+import { ArrowRight, Gamepad2, Terminal } from 'lucide-react';
 
 const games = [
   {
@@ -31,7 +31,7 @@ export default function Home() {
   return (
       <div className="w-full bg-background selection:bg-primary selection:text-black">
 
-        <section className="relative w-full border-b-2 border-border overflow-hidden flex flex-col justify-end min-h-[90vh] lg:min-h-0">
+        <section className="relative w-full border-b-4 border-border overflow-hidden flex flex-col justify-end min-h-[90vh] lg:min-h-0">
 
           <div className="absolute inset-0 z-0 pointer-events-none hidden lg:block">
             <div
@@ -72,8 +72,7 @@ export default function Home() {
               </a>
             </div>
 
-            <div className="relative w-full h-112.5 lg:h-162.5 flex flex-col items-center lg:items-end justify-end">
-
+            <div className="relative w-full h-112.5 lg:h-[650px] flex flex-col items-center lg:items-end justify-end">
               <div className="absolute inset-0 w-full h-full">
                 {heroImages.map((src, index) => (
                     <img
@@ -91,51 +90,70 @@ export default function Home() {
         </section>
 
         <section id="catalogo" className="max-w-7xl mx-auto px-4 py-32 relative z-10">
-          <div className="mb-16">
-            <h2 className="text-4xl md:text-6xl font-black text-foreground uppercase tracking-tighter">
-              SELECCIONA <br />
-              <span className="text-muted">TU JUEGO</span>
-            </h2>
+
+          <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between border-b-4 border-border pb-8 gap-6">
+            <div>
+              <h2 className="text-5xl md:text-7xl font-black text-foreground uppercase tracking-tighter leading-none">
+                SELECCIONA <br />
+                <span className="text-primary">TU JUEGO</span>
+              </h2>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 md:gap-10">
 
             {games.map((game) => (
-                <Link key={game.id} href={`/game/${game.id}`} className="block h-full">
-                  <div className="group h-full flex flex-col bg-card border-2 border-border p-8 transition-all duration-200 hover:bg-primary hover:border-primary cursor-pointer relative overflow-hidden">
+                <Link key={game.id} href={`/game/${game.id}`} className="block h-full group relative">
 
-                    <div className="absolute top-0 right-0 w-16 h-16 bg-black/10 -translate-y-8 translate-x-8 rotate-45 group-hover:bg-black/20 transition-colors" />
+                  <div className="absolute inset-0 bg-primary translate-x-3 translate-y-3 transition-transform duration-200 group-hover:translate-x-0 group-hover:translate-y-0" />
 
-                    <div className="w-full flex items-center justify-start mb-auto">
+                  <div className="relative h-full flex flex-col bg-card border-4 border-border p-8 transition-colors duration-200 group-hover:bg-primary group-hover:border-primary z-10">
+                    <div className="w-full flex items-center justify-center py-6 mb-auto">
                       <img
                           src={game.image}
                           alt={game.name}
-                          className="w-52 md:w-60 object-contain drop-shadow-xl group-hover:scale-110 group-hover:brightness-0 transition-all duration-300 relative z-10"
+                          className="w-52 md:w-60 object-contain drop-shadow-2xl group-hover:scale-110 group-hover:brightness-0 transition-all duration-300 relative z-10"
                       />
                     </div>
 
-                    <div className="mt-12 relative z-10">
-                      <p className="text-muted group-hover:text-black/70 text-sm font-bold uppercase tracking-widest mb-2 transition-colors duration-200">
+                    <div className="mt-12 border-t-4 border-border pt-6 group-hover:border-black transition-colors">
+                      <p className="text-muted group-hover:text-black/70 text-sm font-black uppercase tracking-widest mb-1 transition-colors duration-200">
                         {game.publisher}
                       </p>
-                      <h3 className="text-3xl font-black text-foreground group-hover:text-black transition-colors duration-200 tracking-tighter">
-                        {game.name}
-                      </h3>
+                      <div className="flex items-center justify-between overflow-hidden">
+                        <h3 className="text-3xl lg:text-4xl font-black text-foreground group-hover:text-black transition-colors duration-200 tracking-tighter">
+                          {game.name}
+                        </h3>
+                        <ArrowRight className="w-8 h-8 text-black opacity-0 -translate-x-8 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                      </div>
                     </div>
 
                   </div>
                 </Link>
             ))}
 
-            <div className="h-full min-h-[300px] flex flex-col bg-transparent border-2 border-dashed border-border p-8 justify-between opacity-50 grayscale">
-              <Gamepad2 className="w-16 h-16 text-muted mb-8" />
-              <div className="mt-8">
-                <p className="text-muted text-sm font-bold uppercase tracking-widest mb-2">
-                  PRÓXIMAMENTE
-                </p>
-                <h3 className="text-3xl font-black text-muted tracking-tighter">
-                  MÁS JUEGOS
-                </h3>
+            <div className="h-full min-h-[350px] relative group cursor-not-allowed">
+
+              <div className="absolute inset-0 bg-border/20 translate-x-3 translate-y-3" />
+
+              <div className="relative h-full flex flex-col bg-background border-4 border-dashed border-border p-8 justify-between z-10 opacity-60 grayscale">
+
+                <div className="absolute top-0 right-0 px-3 py-1 bg-border text-background text-[10px] font-black uppercase tracking-widest">
+                  LOCKED
+                </div>
+
+                <div className="flex-1 flex items-center justify-center">
+                  <Gamepad2 className="w-20 h-20 text-border" />
+                </div>
+
+                <div className="border-t-4 border-dashed border-border pt-6">
+                  <p className="text-muted text-sm font-black uppercase tracking-widest mb-1">
+                    EN DESARROLLO
+                  </p>
+                  <h3 className="text-3xl lg:text-4xl font-black text-muted tracking-tighter">
+                    MÁS JUEGOS
+                  </h3>
+                </div>
               </div>
             </div>
 
