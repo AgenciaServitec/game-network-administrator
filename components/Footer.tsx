@@ -9,12 +9,11 @@ export default function Footer() {
 
                 <div className="flex flex-col items-start max-w-sm">
                     <Link href="/" className="flex items-center gap-4 group mb-6">
-                        <div className="bg-primary text-black p-2 border-4 border-black shadow-[4px_4px_0px_#000] group-hover:shadow-none group-hover:translate-x-1 group-hover:translate-y-1 transition-all">
-                            <Gamepad2 className="w-6 h-6 md:w-8 md:h-8" />
-                        </div>
-                        <span className="text-3xl font-black text-foreground tracking-tighter uppercase mt-1">
-                            IM <span className="text-primary">SHOP</span>
-                        </span>
+                        <img
+                            src="/logo.png"
+                            alt="IM Shop"
+                            className="h-20 md:h-28 object-contain drop-shadow-[4px_4px_0px_#000] group-hover:translate-x-1 group-hover:translate-y-1 group-hover:drop-shadow-none transition-all"
+                        />
                     </Link>
 
                     <div className="border-l-4 border-primary pl-4">
