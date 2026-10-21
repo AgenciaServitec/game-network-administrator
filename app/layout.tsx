@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "StoreGamer | Recargas al instante",
+  title: "IM Shop | Recargas al instante",
   description: "Recargas automáticas de diamantes para Free Fire",
 };
 

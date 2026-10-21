@@ -13,7 +13,7 @@ export default function Footer() {
                             <Gamepad2 className="w-6 h-6 md:w-8 md:h-8" />
                         </div>
                         <span className="text-3xl font-black text-foreground tracking-tighter uppercase mt-1">
-                            IM <span className="text-primary">STORES</span>
+                            IM <span className="text-primary">SHOP</span>
                         </span>
                     </Link>
 
