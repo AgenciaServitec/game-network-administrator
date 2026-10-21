@@ -45,11 +45,11 @@ export async function POST(req: NextRequest) {
                     }
                 ],
                 external_reference: order.id,
-                notification_url: 'https://consultants-felt-keeping-handy.trycloudflare.com/api/webhooks/mercadopago',
+                notification_url: 'https://game-network-administrator.vercel.app/api/webhooks/mercadopago',
                 back_urls: {
-                    success: `https://consultants-felt-keeping-handy.trycloudflare.com/status/success`,
-                    failure: `https://consultants-felt-keeping-handy.trycloudflare.com/status/failure`,
-                    pending: `https://consultants-felt-keeping-handy.trycloudflare.com/status/pending`,
+                    success: `https://game-network-administrator.vercel.app/status/success`,
+                    failure: `https://game-network-administrator.vercel.app/status/failure`,
+                    pending: `https://game-network-administrator.vercel.app/status/pending`,
                 },
                 auto_return: 'approved',
             }
