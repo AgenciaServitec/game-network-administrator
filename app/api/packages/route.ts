@@ -1,4 +1,10 @@
-import { NextResponse } from "next/server";
+import {NextResponse} from "next/server";
+
+interface Offer {
+    offer_id: string;
+    name: string;
+    price_usd: string | number;
+}
 
 export async function GET(){
     try {
@@ -35,13 +41,18 @@ export async function GET(){
             return 1.12;
         };
 
-        const offersMap = new Map(data.offers.map((o: any) => [o.offer_id, o]));
+        const offersMap = new Map<string, Offer>(
+            data.offers.map((o: Offer) => [o.offer_id, o])
+        );
 
         const calculatePrice = (offerId: string) => {
             const offer = offersMap.get(offerId);
             if (!offer) return null;
 
-            const usdPrice = parseFloat(offer.price_usd);
+            const usdPrice = typeof offer.price_usd === 'number'
+                ? offer.price_usd
+                : parseFloat(offer.price_usd);
+
             const dynamicMargin = getProfitMargin(usdPrice);
 
             return Math.ceil(Number((usdPrice * exchangeRate * dynamicMargin).toFixed(2)));
@@ -58,7 +69,7 @@ export async function GET(){
 
         const formattedPackages = [];
 
-        for (const offer of data.offers) {
+        for (const offer of data.offers as Offer[]) {
             if (excludedIds.includes(offer.offer_id)) continue;
 
             const basePrice = calculatePrice(offer.offer_id);
