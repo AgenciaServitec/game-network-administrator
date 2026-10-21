@@ -55,7 +55,7 @@ export default function Footer() {
 
             <div className="max-w-7xl mx-auto px-4 border-t-4 border-border pt-8 flex flex-col md:flex-row items-center justify-between gap-4 relative z-10">
                 <p className="text-muted text-xs font-black uppercase tracking-widest text-center md:text-left">
-                    © {new Date().getFullYear()} IM STORES. TODOS LOS DERECHOS RESERVADOS.
+                    © {new Date().getFullYear()} IM SHOP. TODOS LOS DERECHOS RESERVADOS.
                 </p>
 
                 <div className="flex items-center gap-2 text-primary font-mono text-[10px] font-black uppercase tracking-widest">
