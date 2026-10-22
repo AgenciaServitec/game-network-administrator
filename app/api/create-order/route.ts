@@ -45,11 +45,11 @@ export async function POST(req: NextRequest) {
                     }
                 ],
                 external_reference: order.id,
-                notification_url: 'https://game-network-administrator.vercel.app/api/webhooks/mercadopago',
+                notification_url: 'https://www.imshop.pe/api/webhooks/mercadopago',
                 back_urls: {
-                    success: `https://game-network-administrator.vercel.app/status/success`,
-                    failure: `https://game-network-administrator.vercel.app/status/failure`,
-                    pending: `https://game-network-administrator.vercel.app/status/pending`,
+                    success: `https://www.imshop.pe/status/success`,
+                    failure: `https://www.imshop.pe/status/failure`,
+                    pending: `https://www.imshop.pe/status/pending`,
                 },
                 auto_return: 'approved',
             }
