@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
                     failure: `https://www.imshop.pe/status/failure`,
                     pending: `https://www.imshop.pe/status/pending`,
                 },
-                auto_return: 'approved',K
+                auto_return: 'approved',
             }
         });
         return NextResponse.json({
