@@ -2,9 +2,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Search, CheckCircle2, XCircle, Loader2, Gamepad2, ArrowLeft, ShieldCheck, Gem, Crown, Terminal } from 'lucide-react';
+import { Search, CheckCircle2, XCircle, Loader2, Gamepad2, ArrowLeft, ShieldCheck, Gem, Crown, Lock, Zap } from 'lucide-react';
 import { useCartStore } from '@/store/useCartStore';
-import { Button } from '@/components/ui';
 
 interface Package {
     code: string;
@@ -51,17 +50,20 @@ export default function GamePage() {
 
     if (slug !== 'free-fire') {
         return (
-            <div className="w-full flex-1 flex flex-col items-center justify-center py-20 px-4 bg-background selection:bg-primary selection:text-black">
-                <Gamepad2 className="w-24 h-24 text-muted mb-8" />
-                <h1 className="text-4xl md:text-6xl font-black text-foreground uppercase tracking-tighter mb-4 text-center">
-                    JUEGO EN <span className="text-primary">DESARROLLO</span>
-                </h1>
-                <p className="text-muted text-center max-w-md mb-10 font-bold uppercase tracking-widest text-sm">
-                    Estamos trabajando para integrar {slug.replace('-', ' ')} a nuestro catálogo automático pronto.
-                </p>
-                <Button variant="secondary" onClick={() => router.push('/')} className="px-8 py-4 border-4">
-                    <ArrowLeft className="w-5 h-5 mr-3" /> VOLVER AL INICIO
-                </Button>
+            <div className="w-full flex-1 flex flex-col items-center justify-center py-32 px-4 bg-[#050505] selection:bg-primary selection:text-black min-h-[80vh]">
+                <div className="bg-[#0a0a0a] border border-white/10 p-12 rounded-3xl flex flex-col items-center max-w-xl text-center shadow-2xl relative overflow-hidden">
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-primary/20 blur-[50px] rounded-full" />
+                    <Gamepad2 className="w-20 h-20 text-zinc-600 mb-6 relative z-10" />
+                    <h1 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4 relative z-10">
+                        JUEGO EN <span className="text-primary">DESARROLLO</span>
+                    </h1>
+                    <p className="text-zinc-400 font-bold uppercase tracking-widest text-sm mb-10 relative z-10">
+                        Estamos trabajando para integrar {slug.replace('-', ' ')} a nuestro catálogo automático pronto.
+                    </p>
+                    <button onClick={() => router.push('/')} className="bg-white/5 border border-white/10 hover:bg-white/10 text-white px-8 py-3 rounded-full font-bold tracking-widest flex items-center gap-3 transition-all relative z-10">
+                        <ArrowLeft className="w-5 h-5" /> VOLVER AL INICIO
+                    </button>
+                </div>
             </div>
         );
     }
@@ -121,6 +123,7 @@ export default function GamePage() {
 
     const isMembership = (code: string) => code.includes('weekly') || code.includes('monthly') || code.includes('pass');
 
+    // Corregido el error de sintaxis en el sort
     const diamondsPackages = packages
         .filter(pkg => !isMembership(pkg.code))
         .sort((a, b) => a.price - b.price);
@@ -132,189 +135,203 @@ export default function GamePage() {
     const displayedPackages = activeTab === 'diamonds' ? diamondsPackages : membershipsPackages;
 
     return (
-        <div className="w-full pb-32 bg-background selection:bg-primary selection:text-black min-h-screen">
+        <div className="w-full pb-32 bg-[#050505] selection:bg-primary selection:text-black min-h-screen relative overflow-hidden font-sans">
 
-            <div className="bg-background border-b-4 border-border py-6 relative z-20">
+            <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2" />
+            <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-blue-500/5 blur-[150px] rounded-full pointer-events-none translate-x-1/3 translate-y-1/3" />
+
+            <div className="border-b border-white/5 py-4 relative z-20 bg-[#0a0a0a]/50 backdrop-blur-md">
                 <div className="max-w-7xl mx-auto px-4 flex items-center">
-                    <Link href="/#catalogo" className="group flex items-center text-sm font-black uppercase tracking-widest text-muted hover:text-primary | bg-border/20 px-6 py-3 border-2 border-transparent hover:border-primary">
-                        <ArrowLeft className="w-5 h-5 mr-3 group-hover:-translate-x-2 transition-transform" />
-                        VOLVER A JUEGOS
+                    <Link href="/#catalogo" className="group flex items-center text-xs font-bold uppercase tracking-[0.2em] text-zinc-400 hover:text-white transition-colors">
+                        <ArrowLeft className="w-4 h-4 mr-3 group-hover:-translate-x-2 transition-transform text-primary" />
+                        VOLVER AL CATÁLOGO
                     </Link>
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 mt-12 md:mt-20">
+            <div className="max-w-7xl mx-auto px-4 mt-12 md:mt-16 relative z-10">
 
-                <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between border-b-4 border-border pb-8 gap-6">
-                    <div className="border-l-8 border-primary pl-6">
-                        <h1 className="text-5xl md:text-7xl font-black text-foreground uppercase tracking-tighter leading-none mb-2">
-                            RECARGA <br className="hidden md:block" />
-                            <span className="text-primary">FREE FIRE</span>
+                <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div>
+                        <div className="flex items-center gap-2 mb-3">
+                            <div className="w-8 h-1 bg-primary rounded-full shadow-[0_0_10px_rgba(250,204,21,0.5)]"></div>
+                            <p className="text-primary font-bold uppercase tracking-[0.2em] text-xs">Recarga Directa</p>
+                        </div>
+                        <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-none mb-2">
+                            FREE FIRE <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-600">ID</span>
                         </h1>
-                        <p className="text-muted font-bold uppercase tracking-widest text-sm md:text-base mt-4">
-                            DIAMANTES ENTREGADOS AUTOMÁTICAMENTE.
+                        <p className="text-zinc-400 font-medium tracking-wide text-sm md:text-base mt-4 flex items-center gap-2">
+                            <Zap className="w-4 h-4 text-primary" /> Recarga oficial. Entrega instantánea en tu cuenta.
                         </p>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-                    <div className="lg:col-span-5 relative group">
-                        <div className="absolute inset-0 bg-primary translate-x-3 translate-y-3" />
+                    <div className="lg:col-span-5 h-full">
+                        <div className="h-full bg-[#0a0a0a] border border-white/10 rounded-2xl p-6 md:p-8 flex flex-col shadow-2xl relative overflow-hidden">
 
-                        <div className="relative h-full bg-card border-4 border-border p-8 z-10 flex flex-col">
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-50" />
 
-                            <h2 className="text-2xl font-black text-foreground uppercase tracking-tighter mb-8 flex items-center gap-4">
-                                <span className="bg-primary text-black w-10 h-10 flex items-center justify-center text-xl border-2 border-black">1</span>
-                                DATOS DE LA CUENTA
+                            <h2 className="text-xl font-black text-white uppercase tracking-wider mb-8 flex items-center gap-4">
+                                <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 text-primary flex items-center justify-center text-sm shadow-[0_0_15px_rgba(250,204,21,0.15)]">1</div>
+                                Verificación de ID
                             </h2>
 
                             <form onSubmit={validateId} className="space-y-6">
                                 <div>
-                                    <label className="block text-sm font-black text-muted mb-3 uppercase tracking-widest">
-                                        PLAYER ID
+                                    <label className="block text-xs font-bold text-zinc-400 mb-3 uppercase tracking-widest">
+                                        ID del Jugador
                                     </label>
                                     <div className="relative">
                                         <input
                                             type="text"
                                             value={localPlayerId}
                                             onChange={(e) => setLocalPlayerId(e.target.value)}
-                                            className="w-full pl-5 pr-12 py-4 bg-background border-4 border-border outline-none focus:border-primary transition-colors text-foreground font-black text-lg uppercase placeholder:text-border"
+                                            placeholder="Ej: 123456789"
+                                            className="w-full pl-5 pr-12 py-4 bg-[#050505] border border-white/10 rounded-xl outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all text-white font-bold text-lg tracking-wider placeholder:text-zinc-700"
                                             disabled={loading}
                                         />
-                                        <Search className="absolute right-4 top-4.5 text-muted w-6 h-6" />
+                                        <Search className="absolute right-4 top-4.5 text-zinc-500 w-5 h-5" />
                                     </div>
                                 </div>
 
-                                <Button
+                                <button
                                     type="submit"
-                                    variant="primary"
-                                    className="w-full py-5 text-lg border-4 border-black shadow-[4px_4px_0px_#000] hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all"
-                                    disabled={!localPlayerId}
-                                    isLoading={loading}
+                                    className="w-full py-4 bg-primary text-black rounded-xl font-black text-sm uppercase tracking-widest shadow-[0_0_20px_rgba(250,204,21,0.2)] hover:scale-[1.02] hover:shadow-[0_0_25px_rgba(250,204,21,0.3)] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:scale-100"
+                                    disabled={!localPlayerId || loading}
                                 >
-                                    {loading ? 'BUSCANDO...' : 'VERIFICAR CUENTA'}
-                                </Button>
+                                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Buscar Cuenta'}
+                                </button>
                             </form>
 
                             {error && (
-                                <div className="mt-8 p-5 border-4 border-destructive bg-destructive/10 flex items-start gap-4">
-                                    <XCircle className="w-6 h-6 text-destructive shrink-0 mt-0.5" />
-                                    <p className="text-sm font-bold text-destructive uppercase tracking-widest mt-1">{error}</p>
+                                <div className="mt-8 p-4 border border-red-500/30 bg-red-500/10 rounded-xl flex items-start gap-4 animate-in fade-in">
+                                    <XCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                                    <p className="text-xs font-bold text-red-400 uppercase tracking-widest mt-0.5 leading-relaxed">{error}</p>
                                 </div>
                             )}
 
                             {nickname && (
-                                <div className="mt-8 p-5 bg-success border-4 border-black flex items-center gap-5 animate-in fade-in slide-in-from-bottom-2 shadow-[4px_4px_0px_#000]">
-                                    <div className="text-black p-2">
-                                        <CheckCircle2 className="w-8 h-8" />
+                                <div className="mt-8 p-5 bg-green-500/10 border border-green-500/30 rounded-xl flex items-center gap-4 animate-in fade-in slide-in-from-bottom-2">
+                                    <div className="bg-green-500/20 text-green-400 p-2.5 rounded-full">
+                                        <CheckCircle2 className="w-6 h-6" />
                                     </div>
                                     <div>
-                                        <p className="text-xs text-black/70 font-black uppercase tracking-widest mb-1">CUENTA VERIFICADA</p>
-                                        <p className="text-2xl font-black text-black tracking-tighter">{nickname}</p>
+                                        <p className="text-[10px] text-green-400/80 font-bold uppercase tracking-widest mb-1">Cuenta Validada</p>
+                                        <p className="text-xl font-black text-white tracking-wide">{nickname}</p>
                                     </div>
                                 </div>
                             )}
                         </div>
                     </div>
 
-                    <div className="lg:col-span-7 relative group">
+                    <div className="lg:col-span-7 h-full">
+                        <div className="h-full bg-[#0a0a0a] border border-white/10 rounded-2xl p-6 md:p-8 flex flex-col shadow-2xl relative overflow-hidden">
 
-                        <div className={`absolute inset-0 bg-border translate-x-3 translate-y-3 | ${nickname ? 'bg-primary' : 'bg-border'}`} />
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-30" />
 
-                        <div className={`relative h-full border-4 border-border p-8 bg-card flex flex-col z-10 transition-all duration-300 ${!nickname ? 'opacity-50 pointer-events-none grayscale' : ''}`}>
-
-                            <h2 className="text-2xl font-black text-foreground uppercase tracking-tighter mb-8 flex items-center gap-4">
-                                <span className={`w-10 h-10 flex items-center justify-center text-xl border-2 border-black ${nickname ? 'bg-primary text-black' : 'bg-muted text-black'}`}>2</span>
-                                SELECCIONA TU PAQUETE
-                            </h2>
-
-                            <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                                <button
-                                    onClick={() => setActiveTab('diamonds')}
-                                    className={`flex-1 py-4 border-4 font-black uppercase tracking-widest text-xs md:text-sm transition-all flex items-center justify-center gap-2
-                                        ${activeTab === 'diamonds' ? 'bg-primary border-primary text-black translate-x-1 translate-y-1 shadow-none' : 'bg-background border-border text-muted hover:border-primary hover:text-foreground shadow-[4px_4px_0px_rgba(255,255,255,0.05)]'}`}
-                                >
-                                    <Gem className="w-4 h-4" /> DIAMANTES
-                                </button>
-                                <button
-                                    onClick={() => setActiveTab('memberships')}
-                                    className={`flex-1 py-4 border-4 font-black uppercase tracking-widest text-xs md:text-sm transition-all flex items-center justify-center gap-2
-                                        ${activeTab === 'memberships' ? 'bg-primary border-primary text-black translate-x-1 translate-y-1 shadow-none' : 'bg-background border-border text-muted hover:border-primary hover:text-foreground shadow-[4px_4px_0px_rgba(255,255,255,0.05)]'}`}
-                                >
-                                    <Crown className="w-4 h-4" /> PASES Y MEMBRESÍAS
-                                </button>
-                            </div>
-
-                            {loadingPackages ? (
-                                <div className="flex flex-col items-center justify-center py-20 text-muted">
-                                    <Loader2 className="w-12 h-12 animate-spin text-primary mb-6" />
-                                    <p className="text-sm font-black uppercase tracking-widest">OBTENIENDO DATA...</p>
-                                </div>
-                            ) : displayedPackages.length === 0 ? (
-                                <div className="flex items-center justify-center py-20 bg-background border-4 border-dashed border-border">
-                                    <p className="text-center text-sm font-bold uppercase tracking-widest text-muted">
-                                        CATÁLOGO VACÍO.
-                                    </p>
-                                </div>
-                            ) : (
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-10 max-h-125 overflow-y-auto pr-2 custom-scrollbar">
-                                    {displayedPackages.map((pkg) => (
-                                        <button
-                                            key={pkg.code}
-                                            onClick={() => setProduct(pkg.code, pkg.price)}
-                                            className={`relative p-6 border-4 transition-all duration-200 flex flex-col items-center justify-center gap-4 group cursor-pointer
-                                                ${productCode === pkg.code
-                                                ? 'border-primary bg-primary translate-x-1 translate-y-1 shadow-none'
-                                                : 'border-border bg-background hover:border-primary hover:-translate-y-1 hover:shadow-[4px_4px_0px_rgba(250,204,21,1)]'}`}
-                                        >
-                                            <div className={`duration-200 ${productCode === pkg.code ? 'text-black' : 'text-primary '}`}>
-                                                {isMembership(pkg.code) ? <Crown className="w-10 h-10" /> : <Gem className="w-10 h-10" />}
-                                            </div>
-
-                                            <div className="text-center">
-                                                <p className={`font-black text-sm md:text-base leading-tight mb-2 uppercase tracking-tight duration-200
-                                                    ${productCode === pkg.code ? 'text-black' : 'text-foreground group-hover:text-foreground'}`}>
-                                                    {pkg.name}
-                                                </p>
-
-                                                <div className="flex flex-col items-center justify-center">
-                                                    {pkg.originalPrice && pkg.originalPrice > pkg.price && (
-                                                        <p className={`text-xs md:text-sm line-through mb-0.5 font-bold tracking-tighter
-                                                            ${productCode === pkg.code ? 'text-black/60' : 'text-muted group-hover:text-muted'}`}>
-                                                            S/ {pkg.originalPrice.toFixed(2)}
-                                                        </p>
-                                                    )}
-
-                                                    <p className={`text-xl md:text-2xl font-black duration-200 tracking-tighter
-                                                        ${productCode === pkg.code ? 'text-black' : 'text-primary'}`}>
-                                                        S/ {pkg.price.toFixed(2)}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </button>
-                                    ))}
+                            {!nickname && (
+                                <div className="absolute inset-0 z-20 bg-[#050505]/60 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center animate-in fade-in">
+                                    <div className="bg-white/5 border border-white/10 w-16 h-16 rounded-full flex items-center justify-center mb-4 shadow-2xl">
+                                        <Lock className="w-6 h-6 text-zinc-400" />
+                                    </div>
+                                    <h3 className="text-xl font-black text-white mb-2 tracking-wide">Desbloquea el Catálogo</h3>
+                                    <p className="text-zinc-400 text-sm max-w-sm">Ingresa tu Player ID en el panel izquierdo para verificar tu cuenta y ver los paquetes disponibles.</p>
                                 </div>
                             )}
 
-                            <div className="pt-8 border-t-4 border-border mt-auto">
-                                <Button
-                                    onClick={handleCheckout}
-                                    variant="mercadoPago"
-                                    className="w-full py-6 text-lg md:text-xl font-black tracking-widest border-4 border-black shadow-[4px_4px_0px_#000] hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all disabled:opacity-50 disabled:shadow-none disabled:translate-x-0 disabled:translate-y-0"
-                                    disabled={!productCode}
-                                    isLoading={loading}
+                            <h2 className="text-xl font-black text-white uppercase tracking-wider mb-8 flex items-center gap-4 relative z-10">
+                                <div className={`w-8 h-8 rounded-full border flex items-center justify-center text-sm transition-colors ${nickname ? 'bg-primary/10 border-primary/30 text-primary shadow-[0_0_15px_rgba(250,204,21,0.15)]' : 'bg-white/5 border-white/10 text-zinc-500'}`}>2</div>
+                                Elige tu Paquete
+                            </h2>
+
+                            <div className="flex p-1 bg-[#050505] border border-white/10 rounded-xl mb-8 relative z-10">
+                                <button
+                                    onClick={() => setActiveTab('diamonds')}
+                                    className={`flex-1 py-3 text-xs md:text-sm font-bold uppercase tracking-widest rounded-lg transition-all flex items-center justify-center gap-2
+                                        ${activeTab === 'diamonds' ? 'bg-white/10 text-white shadow-md' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'}`}
                                 >
-                                    {loading ? 'PROCESANDO...' : (
+                                    <Gem className="w-4 h-4" /> Diamantes
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('memberships')}
+                                    className={`flex-1 py-3 text-xs md:text-sm font-bold uppercase tracking-widest rounded-lg transition-all flex items-center justify-center gap-2
+                                        ${activeTab === 'memberships' ? 'bg-white/10 text-white shadow-md' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'}`}
+                                >
+                                    <Crown className="w-4 h-4" /> Membresías
+                                </button>
+                            </div>
+
+                            <div className="relative z-10 flex-1">
+                                {loadingPackages ? (
+                                    <div className="flex flex-col items-center justify-center py-20 text-zinc-500">
+                                        <Loader2 className="w-10 h-10 animate-spin text-primary/50 mb-4" />
+                                        <p className="text-xs font-bold uppercase tracking-widest">Sincronizando...</p>
+                                    </div>
+                                ) : displayedPackages.length === 0 ? (
+                                    <div className="flex items-center justify-center py-20 border border-dashed border-white/10 rounded-xl">
+                                        <p className="text-center text-xs font-bold uppercase tracking-widest text-zinc-500">
+                                            No hay paquetes disponibles.
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8 max-h-[450px] overflow-y-auto pr-2 custom-scrollbar">
+                                        {displayedPackages.map((pkg) => (
+                                            <button
+                                                key={pkg.code}
+                                                onClick={() => setProduct(pkg.code, pkg.price)}
+                                                className={`relative p-5 rounded-xl border transition-all duration-300 flex flex-col items-center justify-center gap-3 group
+                                                    ${productCode === pkg.code
+                                                    ? 'border-primary bg-primary/10 shadow-[0_0_20px_rgba(250,204,21,0.1)]'
+                                                    : 'border-white/10 bg-white/5 hover:border-primary/50 hover:bg-white/10'}`}
+                                            >
+                                                {productCode === pkg.code && (
+                                                    <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(250,204,21,1)]" />
+                                                )}
+
+                                                <div className={`transition-colors duration-300 ${productCode === pkg.code ? 'text-primary' : 'text-zinc-400 group-hover:text-primary/70'}`}>
+                                                    {isMembership(pkg.code) ? <Crown className="w-8 h-8" /> : <Gem className="w-8 h-8" />}
+                                                </div>
+
+                                                <div className="text-center w-full">
+                                                    <p className="font-bold text-xs text-white mb-2 leading-tight h-8 flex items-center justify-center">
+                                                        {pkg.name}
+                                                    </p>
+
+                                                    <div className="flex flex-col items-center justify-center bg-black/30 rounded-lg py-2 w-full">
+                                                        {pkg.originalPrice && pkg.originalPrice > pkg.price && (
+                                                            <p className="text-[10px] text-zinc-500 line-through mb-0.5">
+                                                                S/ {pkg.originalPrice.toFixed(2)}
+                                                            </p>
+                                                        )}
+                                                        <p className={`text-lg font-black tracking-wide ${productCode === pkg.code ? 'text-primary' : 'text-white'}`}>
+                                                            S/ {pkg.price.toFixed(2)}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="pt-6 border-t border-white/10 mt-auto relative z-10">
+                                <button
+                                    onClick={handleCheckout}
+                                    className="w-full py-4 lg:py-5 bg-[#009EE3] hover:bg-[#0089c4] text-white rounded-xl font-black text-sm md:text-base tracking-widest shadow-[0_0_20px_rgba(0,158,227,0.3)] hover:shadow-[0_0_30px_rgba(0,158,227,0.5)] transition-all hover:scale-[1.02] flex items-center justify-center gap-3 disabled:opacity-50 disabled:hover:scale-100 disabled:shadow-none"
+                                    disabled={!productCode || loading}
+                                >
+                                    {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
                                         <>
                                             PAGAR CON MERCADO PAGO
-                                            {useCartStore.getState().price > 0 && ` (S/ ${useCartStore.getState().price.toFixed(2)})`}
+                                            {useCartStore.getState().price > 0 && <span className="bg-white/20 px-2 py-0.5 rounded-md">S/ {useCartStore.getState().price.toFixed(2)}</span>}
                                         </>
                                     )}
-                                </Button>
-                                <div className="flex items-center justify-center gap-3 mt-6 text-muted text-xs font-black uppercase tracking-widest">
-                                    <ShieldCheck className="w-5 h-5 text-success" />
-                                    TRANSACCIÓN PROTEGIDA Y ENCRIPTADA
+                                </button>
+                                <div className="flex items-center justify-center gap-2 mt-5 text-zinc-500 text-[10px] font-bold uppercase tracking-widest">
+                                    <ShieldCheck className="w-4 h-4 text-green-500" />
+                                    Transacción procesada y encriptada por Mercado Pago
                                 </div>
                             </div>
                         </div>

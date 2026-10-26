@@ -1,64 +1,64 @@
 import Link from 'next/link';
-import { Gamepad2, Terminal } from 'lucide-react';
+import { Zap } from 'lucide-react';
 
 export default function Footer() {
     return (
-        <footer className="bg-background border-t-4 border-border mt-auto pt-16 pb-8 relative overflow-hidden">
+        <footer className="bg-[#050505] border-t border-white/10 mt-auto pt-16 pb-8 relative overflow-hidden">
+
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-2xl h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 max-w-lg h-32 bg-primary/5 blur-3xl rounded-[100%] pointer-events-none" />
 
             <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-start justify-between gap-12 mb-16 relative z-10">
 
                 <div className="flex flex-col items-start max-w-sm">
-                    <Link href="/" className="flex items-center gap-4 group mb-6">
+                    <Link href="/" className="flex items-center group mb-6">
                         <img
                             src="/logo.png"
                             alt="IM Shop"
-                            className="h-20 md:h-28 object-contain drop-shadow-[4px_4px_0px_#000] group-hover:translate-x-1 group-hover:translate-y-1 group-hover:drop-shadow-none transition-all"
+                            className="h-16 md:h-20 object-contain drop-shadow-[0_0_15px_rgba(250,204,21,0.15)] group-hover:scale-105 group-hover:drop-shadow-[0_0_25px_rgba(250,204,21,0.35)] transition-all duration-500"
                         />
                     </Link>
 
-                    <div className="border-l-4 border-primary pl-4">
-                        <p className="text-muted text-sm font-black uppercase tracking-widest leading-relaxed">
+                    <div className="border-l border-primary/50 pl-4">
+                        <p className="text-zinc-400 text-xs font-bold uppercase tracking-widest leading-relaxed">
                             Recargas oficiales al instante. <br /> Domina el juego sin esperas.
                         </p>
                     </div>
                 </div>
 
                 <div className="flex flex-col gap-4">
-                    <h4 className="text-background bg-foreground px-2 py-1 font-black uppercase tracking-widest text-xs mb-2 inline-block self-start">
-                        [ PLATAFORMA ]
+                    <h4 className="text-white font-bold uppercase tracking-[0.2em] text-xs mb-2 flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary" /> Plataforma
                     </h4>
-                    <Link href="/#catalogo" className="group flex items-center text-foreground text-xs font-bold uppercase tracking-widest transition-all">
-                        <span className="w-0 overflow-hidden group-hover:w-4 transition-all duration-200 text-primary font-black">{'> '}</span>
-                        <span className="group-hover:text-primary transition-colors">Catálogo de Juegos</span>
+                    <Link href="/#catalogo" className="text-zinc-400 text-xs font-bold uppercase tracking-widest hover:text-primary hover:translate-x-1 transition-all duration-300">
+                        Catálogo de Juegos
                     </Link>
-                    <Link href="#" className="group flex items-center text-foreground text-xs font-bold uppercase tracking-widest transition-all">
-                        <span className="w-0 overflow-hidden group-hover:w-4 transition-all duration-200 text-primary font-black">{'> '}</span>
-                        <span className="group-hover:text-primary transition-colors">Soporte Técnico</span>
+                    <Link href="#" className="text-zinc-400 text-xs font-bold uppercase tracking-widest hover:text-primary hover:translate-x-1 transition-all duration-300">
+                        Soporte Técnico
                     </Link>
                 </div>
 
+                {/* COLUMNA 3: LEGAL */}
                 <div className="flex flex-col gap-4">
-                    <h4 className="text-background bg-foreground px-2 py-1 font-black uppercase tracking-widest text-xs mb-2 inline-block self-start">
-                        [ LEGAL ]
+                    <h4 className="text-white font-bold uppercase tracking-[0.2em] text-xs mb-2 flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary" /> Legal
                     </h4>
-                    <Link href="#" className="group flex items-center text-foreground text-xs font-bold uppercase tracking-widest transition-all">
-                        <span className="w-0 overflow-hidden group-hover:w-4 transition-all duration-200 text-primary font-black">{'> '}</span>
-                        <span className="group-hover:text-primary transition-colors">Términos y Condiciones</span>
+                    <Link href="#" className="text-zinc-400 text-xs font-bold uppercase tracking-widest hover:text-primary hover:translate-x-1 transition-all duration-300">
+                        Términos y Condiciones
                     </Link>
-                    <Link href="#" className="group flex items-center text-foreground text-xs font-bold uppercase tracking-widest transition-all">
-                        <span className="w-0 overflow-hidden group-hover:w-4 transition-all duration-200 text-primary font-black">{'> '}</span>
-                        <span className="group-hover:text-primary transition-colors">Políticas de Privacidad</span>
+                    <Link href="#" className="text-zinc-400 text-xs font-bold uppercase tracking-widest hover:text-primary hover:translate-x-1 transition-all duration-300">
+                        Políticas de Privacidad
                     </Link>
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 border-t-4 border-border pt-8 flex flex-col md:flex-row items-center justify-between gap-4 relative z-10">
-                <p className="text-muted text-xs font-black uppercase tracking-widest text-center md:text-left">
+            <div className="max-w-7xl mx-auto px-4 border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 relative z-10">
+                <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest text-center md:text-left">
                     © {new Date().getFullYear()} IM SHOP. TODOS LOS DERECHOS RESERVADOS.
                 </p>
 
-                <div className="flex items-center gap-2 text-primary font-mono text-[10px] font-black uppercase tracking-widest">
-                    <span>LIMA, PE</span>
+                <div className="flex items-center gap-2 text-primary text-[10px] font-bold uppercase tracking-widest bg-primary/10 px-3 py-1 rounded-full border border-primary/20 shadow-[0_0_10px_rgba(250,204,21,0.1)]">
+                    <Zap className="w-3 h-3" /> LIMA, PE
                 </div>
             </div>
         </footer>

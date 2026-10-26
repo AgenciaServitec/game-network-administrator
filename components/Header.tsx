@@ -2,33 +2,33 @@ import Link from 'next/link';
 
 export default function Header() {
     return (
-        <header className="bg-background border-b-4 border-border sticky top-0 z-50">
+        <header className="bg-[#050505]/80 backdrop-blur-xl border-b border-white/10 sticky top-0 z-50 transition-all duration-300">
             <div className="max-w-7xl mx-auto px-4 h-24 flex items-center justify-between">
 
                 <Link href="/" className="flex items-center group">
                     <img
                         src="/logo.png"
                         alt="IM Shop"
-                        className="h-20 md:h-28 object-contain drop-shadow-[4px_4px_0px_#000] group-hover:translate-x-1 group-hover:translate-y-1 group-hover:drop-shadow-none transition-all"
+                        className="h-16 md:h-20 object-contain drop-shadow-[0_0_15px_rgba(250,204,21,0.15)] group-hover:scale-105 group-hover:drop-shadow-[0_0_25px_rgba(250,204,21,0.35)] transition-all duration-500"
                     />
                 </Link>
 
-                <nav className="hidden md:flex items-center gap-1">
+                <nav className="hidden md:flex items-center gap-2">
                     <Link
                         href="/"
-                        className="text-xs font-black text-foreground uppercase tracking-widest px-5 py-3 border-4 border-transparent hover:border-black hover:bg-primary hover:text-black hover:-translate-y-1 hover:shadow-[4px_4px_0px_#000] transition-all"
+                        className="text-xs font-bold text-zinc-400 uppercase tracking-widest px-6 py-2.5 rounded-full hover:bg-white/5 hover:text-white transition-all duration-300"
                     >
                         INICIO
                     </Link>
                     <Link
                         href="/#catalogo"
-                        className="text-xs font-black text-foreground uppercase tracking-widest px-5 py-3 border-4 border-transparent hover:border-black hover:bg-primary hover:text-black hover:-translate-y-1 hover:shadow-[4px_4px_0px_#000] transition-all"
+                        className="text-xs font-bold text-zinc-400 uppercase tracking-widest px-6 py-2.5 rounded-full hover:bg-white/5 hover:text-white transition-all duration-300"
                     >
                         CATÁLOGO
                     </Link>
                     <Link
                         href="#"
-                        className="text-xs font-black text-foreground uppercase tracking-widest px-5 py-3 border-4 border-transparent hover:border-black hover:bg-primary hover:text-black hover:-translate-y-1 hover:shadow-[4px_4px_0px_#000] transition-all"
+                        className="text-xs font-bold text-zinc-400 uppercase tracking-widest px-6 py-2.5 rounded-full hover:bg-white/5 hover:text-white transition-all duration-300"
                     >
                         SOPORTE
                     </Link>
