@@ -13,6 +13,8 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Faltan datos de la orden' }, { status: 400 });
         }
 
+        const [type, codestoreProductId, sku] = productCode.split('___');
+
         const { data: order, error } = await supabase
             .from('orders')
             .insert([
@@ -31,32 +33,33 @@ export async function POST(req: NextRequest) {
 
         const preference = new Preference(client);
 
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.imshop.pe';
 
         const mpResponse = await preference.create({
             body: {
                 items: [
                     {
-                        id: productCode,
+                        id: sku || 'FF-RECARGA',
                         title: `Recarga Free Fire - ${nickname}`,
                         quantity: 1,
                         unit_price: Number(price),
                         currency_id: 'PEN',
                     }
                 ],
-                external_reference: order.id,
-                notification_url: 'https://www.imshop.pe/api/webhooks/mercadopago',
+                external_reference: order.id.toString(),
+                notification_url: `${baseUrl}/api/webhooks/mercadopago`,
                 back_urls: {
-                    success: `https://www.imshop.pe/status/success`,
-                    failure: `https://www.imshop.pe/status/failure`,
-                    pending: `https://www.imshop.pe/status/pending`,
+                    success: `${baseUrl}/status/success`,
+                    failure: `${baseUrl}/status/failure`,
+                    pending: `${baseUrl}/status/pending`,
                 },
                 auto_return: 'approved',
             }
         });
+
         return NextResponse.json({
             success: true,
-            initPoint: mpResponse.sandbox_init_point || mpResponse.init_point
+            initPoint: mpResponse.init_point || mpResponse.sandbox_init_point
         });
 
     } catch (error) {

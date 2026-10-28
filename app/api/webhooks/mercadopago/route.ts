@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { MercadoPagoConfig, Payment } from 'mercadopago';
 import { supabase } from '@/lib/supabase';
+import crypto from 'crypto';
 
 const client = new MercadoPagoConfig({ accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN! });
 
@@ -37,44 +38,60 @@ export async function POST(req: NextRequest) {
                 return NextResponse.json({ success: true, message: 'Orden ya procesada' }, { status: 200 });
             }
 
-            console.log(`¡Pago confirmado! Conectando con FazerCards para inyectar ${order.product_code} al ID ${order.player_id}...`);
+            console.log(`¡Pago confirmado! Conectando con Codestore para inyectar al ID ${order.player_id}...`);
 
-            const apiKey = process.env.FAZERCARDS_API_KEY!;
+            const [type, productId, sku] = order.product_code.split('___');
+
+            const apiKey = process.env.CODESTORE_API_KEY!;
+            const secretKey = process.env.CODESTORE_SECRET_KEY!;
+            const method = 'POST';
+            const targetPath = '/v1/orders/recharge';
+            const timestamp = Date.now().toString();
 
             const payloadObj = {
-                category_id: "free_fire_latam",
-                offer_id: order.product_code,
-                fields: {
-                    "player_id": String(order.player_id)
-                }
+                productId: productId,
+                sku: sku,
+                quantity: 1,
+                partnerOrderId: String(orderId),
+                playerId: String(order.player_id),
+                zoneId: ''
             };
 
-            const apiResponse = await fetch('https://api.fzr.cards/api/v2/topups/order', {
+            const stringifiedBody = JSON.stringify(payloadObj);
+
+            const signaturePayload = `${timestamp}.${method}.${targetPath}.${stringifiedBody}`;
+            const signature = crypto
+                .createHmac('sha256', secretKey)
+                .update(signaturePayload)
+                .digest('hex');
+
+            const apiResponse = await fetch(`https://api.codestore.app${targetPath}`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`,
-                    'Idempotency-Key': String(orderId)
+                    'x-api-key': apiKey,
+                    'x-timestamp': timestamp,
+                    'x-signature': signature,
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(payloadObj)
+                body: stringifiedBody
             });
 
             const apiData = await apiResponse.json();
 
-            if (apiResponse.ok && apiData.ok === true) {
+            if (apiResponse.ok && apiData.success === true) {
                 await supabase.from('orders').update({
                     status: 'paid',
-                    provider_status: `FazerCards: Inyección iniciada (ID: ${apiData.order?.id || 'OK'})`
+                    provider_status: `Codestore: Procesando (ID: ${apiData.data?.orderId || 'OK'})`
                 }).eq('id', orderId);
 
-                console.log(`¡Inyección Exitosa en FazerCards!`);
+                console.log(`¡Inyección Exitosa en Codestore!`);
             } else {
                 await supabase.from('orders').update({
                     status: 'failed_injection',
-                    provider_status: `Error: ${apiData.error || 'Desconocido'} (Code: ${apiData.code || 'N/A'})`
+                    provider_status: `Error: ${apiData.message || 'Desconocido'}`
                 }).eq('id', orderId);
 
-                console.error(`Error de FazerCards:`, apiData.error);
+                console.error(`Error de Codestore:`, apiData.message);
             }
         }
 

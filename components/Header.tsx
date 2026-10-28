@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import AuthButton from '@/components/AuthButton';
 
 export default function Header() {
     return (
@@ -13,26 +14,31 @@ export default function Header() {
                     />
                 </Link>
 
-                <nav className="hidden md:flex items-center gap-2">
-                    <Link
-                        href="/"
-                        className="text-xs font-bold text-zinc-400 uppercase tracking-widest px-6 py-2.5 rounded-full hover:bg-white/5 hover:text-white transition-all duration-300"
-                    >
-                        INICIO
-                    </Link>
-                    <Link
-                        href="/#catalogo"
-                        className="text-xs font-bold text-zinc-400 uppercase tracking-widest px-6 py-2.5 rounded-full hover:bg-white/5 hover:text-white transition-all duration-300"
-                    >
-                        CATÁLOGO
-                    </Link>
-                    <Link
-                        href="#"
-                        className="text-xs font-bold text-zinc-400 uppercase tracking-widest px-6 py-2.5 rounded-full hover:bg-white/5 hover:text-white transition-all duration-300"
-                    >
-                        SOPORTE
-                    </Link>
-                </nav>
+                <div className="flex items-center gap-4 md:gap-6">
+                    <nav className="hidden md:flex items-center gap-2">
+                        <Link
+                            href="/"
+                            className="text-xs font-bold text-zinc-400 uppercase tracking-widest px-6 py-2.5 rounded-full hover:bg-white/5 hover:text-white transition-all duration-300"
+                        >
+                            INICIO
+                        </Link>
+                        <Link
+                            href="/#catalogo"
+                            className="text-xs font-bold text-zinc-400 uppercase tracking-widest px-6 py-2.5 rounded-full hover:bg-white/5 hover:text-white transition-all duration-300"
+                        >
+                            CATÁLOGO
+                        </Link>
+                        <Link
+                            href="#"
+                            className="text-xs font-bold text-zinc-400 uppercase tracking-widest px-6 py-2.5 rounded-full hover:bg-white/5 hover:text-white transition-all duration-300"
+                        >
+                            SOPORTE
+                        </Link>
+                    </nav>
+
+                    <AuthButton />
+                </div>
+
             </div>
         </header>
     );

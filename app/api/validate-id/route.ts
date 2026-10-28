@@ -1,56 +1,61 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
+import crypto from 'crypto';
 
-export async function POST(req: NextRequest) {
+export async function POST(request: Request) {
     try {
-        const body = await req.json();
-        const { playerId, gameCode } = body;
+        const { playerId, gameCode } = await request.json();
 
-        if (!playerId) {
-            return NextResponse.json({ error: 'Player ID es requerido' }, { status: 400 });
-        }
+        const apiKey = process.env.CODESTORE_API_KEY!;
+        const secretKey = process.env.CODESTORE_SECRET_KEY!;
+        const targetPath = '/v1/validate-player';
+        const method = 'POST';
+        const timestamp = Date.now().toString();
 
-        const apiKey = process.env.FAZERCARDS_API_KEY;
+        const codestoreGameCode = gameCode === 'freefire' ? 'free-fire-latam' : gameCode;
 
-        if (!apiKey) {
-            return NextResponse.json({ error: 'Falta la API Key en el servidor' }, { status: 500 });
-        }
+        const bodyObj = {
+            game: codestoreGameCode,
+            playerId: playerId,
+            zoneId: ''
+        };
+        const stringifiedBody = JSON.stringify(bodyObj);
 
+        const payload = `${timestamp}.${method}.${targetPath}.${stringifiedBody}`;
+        const signature = crypto
+            .createHmac('sha256', secretKey)
+            .update(payload)
+            .digest('hex');
 
-        const categoryId = gameCode === 'freefire' ? 'free_fire' : gameCode;
-
-        const response = await fetch('https://api.fzr.cards/api/v2/topups/validate-id', {
-            method: 'POST',
+        const response = await fetch(`https://api.codestore.app${targetPath}`, {
+            method: method,
             headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-API-Key': apiKey,
+                'x-api-key': apiKey,
+                'x-timestamp': timestamp,
+                'x-signature': signature,
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                category_id: categoryId,
-                fields: {
-                    player_id: playerId
-                }
-            })
+            body: stringifiedBody
         });
 
         const data = await response.json();
 
-        if (data.ok) {
-            const nickname = data.name || data.player_name || data.result?.name || data.data?.name || 'Cuenta Verificada';
-
+        if (response.ok && data.success) {
             return NextResponse.json({
                 success: true,
-                nickname: nickname,
+                nickname: data.data.nickname
             });
+        } else {
+            return NextResponse.json(
+                { success: false, error: data.message || 'ID no encontrado o inválido' },
+                { status: 400 }
+            );
         }
 
-        return NextResponse.json({
-            success: false,
-            error: data.error || 'ID de jugador no encontrado'
-        }, { status: 404 });
-
     } catch (error) {
-        console.error('Error validando ID con FazerCards:', error);
-        return NextResponse.json({ error: 'Error de conexión con el proveedor' }, { status: 500 });
+        console.error('Error validando ID con Codestore:', error);
+        return NextResponse.json(
+            { success: false, error: 'Error de conexión con el servidor mayorista' },
+            { status: 500 }
+        );
     }
 }

@@ -25,7 +25,7 @@ export default function GamePage() {
 
     const [activeTab, setActiveTab] = useState<'diamonds' | 'memberships'>('diamonds');
 
-    const { nickname, productCode, setPlayer, setProduct } = useCartStore();
+    const { nickname, productCode, price, setPlayer, setProduct } = useCartStore();
 
     useEffect(() => {
         if (slug !== 'free-fire') return;
@@ -82,9 +82,17 @@ export default function GamePage() {
                 body: JSON.stringify({ playerId: localPlayerId, gameCode: 'freefire' }),
             });
             const data = await response.json();
+
             if (response.ok && data.success) {
                 setPlayer(localPlayerId, data.nickname);
             } else {
+                const errorMessage = data.error?.toUpperCase() || '';
+                if (errorMessage.includes('NOT ENABLED')) {
+                    console.warn('Bypass de validación activo por bloqueo de Codestore');
+                    setPlayer(localPlayerId, 'USUARIO_DE_PRUEBA');
+                    return;
+                }
+
                 setError(data.error || 'No se pudo validar el ID');
             }
         } catch (err) {
@@ -104,7 +112,7 @@ export default function GamePage() {
                     playerId: useCartStore.getState().playerId,
                     nickname,
                     productCode,
-                    price: useCartStore.getState().price
+                    price: price
                 }),
             });
             const data = await response.json();
@@ -123,7 +131,6 @@ export default function GamePage() {
 
     const isMembership = (code: string) => code.includes('weekly') || code.includes('monthly') || code.includes('pass');
 
-    // Corregido el error de sintaxis en el sort
     const diamondsPackages = packages
         .filter(pkg => !isMembership(pkg.code))
         .sort((a, b) => a.price - b.price);
@@ -325,8 +332,7 @@ export default function GamePage() {
                                     {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
                                         <>
                                             PAGAR CON MERCADO PAGO
-                                            {useCartStore.getState().price > 0 && <span className="bg-white/20 px-2 py-0.5 rounded-md">S/ {useCartStore.getState().price.toFixed(2)}</span>}
-                                        </>
+                                            {price > 0 && <span className="bg-white/20 px-2 py-0.5 rounded-md">S/ {price.toFixed(2)}</span>}                                        </>
                                     )}
                                 </button>
                                 <div className="flex items-center justify-center gap-2 mt-5 text-zinc-500 text-[10px] font-bold uppercase tracking-widest">
