@@ -22,23 +22,26 @@ export default function GamePage() {
     const [error, setError] = useState('');
     const [packages, setPackages] = useState<Package[]>([]);
     const [loadingPackages, setLoadingPackages] = useState(true);
+    const [gameExists, setGameExists] = useState(true); // NUEVO: Estado para el mantenimiento dinámico
 
     const [activeTab, setActiveTab] = useState<'diamonds' | 'memberships'>('diamonds');
 
     const { nickname, productCode, price, setPlayer, setProduct } = useCartStore();
 
     useEffect(() => {
-        if (slug !== 'free-fire') return;
-
         const fetchPackages = async () => {
             try {
-                const res = await fetch('/api/packages');
+                const res = await fetch(`/api/packages?slug=${slug}`);
                 const data = await res.json();
+
                 if (data.success) {
                     setPackages(data.packages);
+                } else {
+                    setGameExists(false);
                 }
             } catch (err) {
                 console.error('Error cargando paquetes:', err);
+                setGameExists(false);
             } finally {
                 setLoadingPackages(false);
             }
@@ -48,7 +51,7 @@ export default function GamePage() {
         return () => useCartStore.getState().clearCart();
     }, [slug]);
 
-    if (slug !== 'free-fire') {
+    if (!gameExists) {
         return (
             <div className="w-full flex-1 flex flex-col items-center justify-center py-32 px-4 bg-[#050505] selection:bg-primary selection:text-black min-h-[80vh]">
                 <div className="bg-[#0a0a0a] border border-white/10 p-12 rounded-3xl flex flex-col items-center max-w-xl text-center shadow-2xl relative overflow-hidden">
@@ -58,7 +61,7 @@ export default function GamePage() {
                         JUEGO EN <span className="text-primary">DESARROLLO</span>
                     </h1>
                     <p className="text-zinc-400 font-bold uppercase tracking-widest text-sm mb-10 relative z-10">
-                        Estamos trabajando para integrar {slug.replace('-', ' ')} a nuestro catálogo automático pronto.
+                        Estamos trabajando para integrar {slug.replace(/-/g, ' ').toUpperCase()} a nuestro catálogo automático pronto.
                     </p>
                     <button onClick={() => router.push('/')} className="bg-white/5 border border-white/10 hover:bg-white/10 text-white px-8 py-3 rounded-full font-bold tracking-widest flex items-center gap-3 transition-all relative z-10">
                         <ArrowLeft className="w-5 h-5" /> VOLVER AL INICIO
@@ -165,7 +168,7 @@ export default function GamePage() {
                             <p className="text-primary font-bold uppercase tracking-[0.2em] text-xs">Recarga Directa</p>
                         </div>
                         <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-none mb-2">
-                            FREE FIRE <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-600">ID</span>
+                            {slug.replace(/-/g, ' ')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-600">ID</span>
                         </h1>
                         <p className="text-zinc-400 font-medium tracking-wide text-sm md:text-base mt-4 flex items-center gap-2">
                             <Zap className="w-4 h-4 text-primary" /> Recarga oficial. Entrega instantánea en tu cuenta.
@@ -307,11 +310,6 @@ export default function GamePage() {
                                                     </p>
 
                                                     <div className="flex flex-col items-center justify-center bg-black/30 rounded-lg py-2 w-full">
-                                                        {pkg.originalPrice && pkg.originalPrice > pkg.price && (
-                                                            <p className="text-[10px] text-zinc-500 line-through mb-0.5">
-                                                                S/ {pkg.originalPrice.toFixed(2)}
-                                                            </p>
-                                                        )}
                                                         <p className={`text-lg font-black tracking-wide ${productCode === pkg.code ? 'text-primary' : 'text-white'}`}>
                                                             S/ {pkg.price.toFixed(2)}
                                                         </p>

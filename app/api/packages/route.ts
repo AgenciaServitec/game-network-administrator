@@ -1,65 +1,93 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
-export async function GET() {
+const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
+export async function GET(request: NextRequest) {
     try {
-        const apiKey = process.env.CODESTORE_API_KEY!;
+        const { searchParams } = new URL(request.url);
+        const slug = searchParams.get('slug');
 
+        if (!slug) {
+            return NextResponse.json({ success: false, error: 'Slug requerido' }, { status: 400 });
+        }
+
+        const { data: gameConfig, error: gameError } = await supabase
+            .from('games_config')
+            .select('*')
+            .eq('slug', slug)
+            .eq('is_active', true)
+            .single();
+
+        if (gameError || !gameConfig) {
+            return NextResponse.json({ success: false, error: 'Juego no encontrado' });
+        }
+
+        const { data: productConfigs } = await supabase
+            .from('product_config')
+            .select('*')
+            .eq('game_slug', slug)
+            .eq('is_active', true);
+
+        const configMap = new Map();
+        if (productConfigs) {
+            productConfigs.forEach(p => configMap.set(p.product_code, p.price_pen));
+        }
+
+        const apiKey = process.env.CODESTORE_API_KEY!;
         const response = await fetch('https://api.codestore.app/v1/catalog', {
             method: 'GET',
-            headers: {
-                'x-api-key': apiKey,
-                'Content-Type': 'application/json'
-            }
+            headers: { 'x-api-key': apiKey, 'Content-Type': 'application/json' },
+            cache: 'no-store'
         });
 
         const data = await response.json();
+        if (!response.ok || !data.success) throw new Error('Error al obtener catálogo de Codestore');
 
-        if (!response.ok || !data.success) {
-            throw new Error(data.message || 'Error al obtener el catálogo');
-        }
-
-        const freeFirePackage = data.data.catalog.find((pkg: any) =>
-            pkg?.packageName?.includes('Free Fire LATAM')
+        const codestorePackage = data.data.catalog.find((pkg: any) =>
+            pkg?.packageName === gameConfig.codestore_match
         );
 
-        if (!freeFirePackage) {
+        if (!codestorePackage) {
             return NextResponse.json({ success: true, packages: [] });
         }
 
-        const exchangeRate = 3.80;
-        const profitMargin = 1.35;
-
-        const formattedPackages = freeFirePackage.products
+        const formattedPackages = codestorePackage.products
             .filter((product: any) => product.inStock)
             .map((product: any) => {
-
-                const finalPricePEN = (product.price * exchangeRate) * profitMargin;
-
-                let codeType = 'diamonds';
                 const nameLower = product.name.toLowerCase();
+                let codeType = 'diamonds';
+                if (nameLower.includes('semanal') || nameLower.includes('weekly')) codeType = 'weekly';
+                else if (nameLower.includes('mensual') || nameLower.includes('monthly')) codeType = 'monthly';
+                else if (nameLower.includes('pase') || nameLower.includes('level') || nameLower.includes('pass')) codeType = 'pass';
 
-                if (nameLower.includes('semanal')) codeType = 'weekly';
-                else if (nameLower.includes('mensual')) codeType = 'monthly';
-                else if (nameLower.includes('pase') || nameLower.includes('level')) codeType = 'pass';
+                const productCode = `${codeType}___${product.productId}___${product.sku}`;
 
-                return {
-                    code: `${codeType}___${product.productId}___${product.sku}`,
-                    name: product.name,
-                    price: Number(finalPricePEN.toFixed(2)),
-                    originalPrice: Number((finalPricePEN * 1.15).toFixed(2))
-                };
-            });
+                if (configMap.has(productCode)) {
+                    const finalPrice = configMap.get(productCode);
+                    return {
+                        code: productCode,
+                        name: product.name,
+                        price: Number(finalPrice),
+                        originalPrice: Number((finalPrice * 1.15).toFixed(2))
+                    };
+                }
+                return null;
+            })
+            .filter(Boolean);
+
+        formattedPackages.sort((a: any, b: any) => a.price - b.price);
 
         return NextResponse.json({
             success: true,
             packages: formattedPackages
         });
 
-    } catch (error: any) {
-        console.error('Error obteniendo catálogo de Codestore:', error);
-        return NextResponse.json(
-            { success: false, error: 'Error interno del servidor' },
-            { status: 500 }
-        );
+    } catch (error) {
+        console.error('Error en api/packages:', error);
+        return NextResponse.json({ success: false, error: 'Error interno' }, { status: 500 });
     }
 }

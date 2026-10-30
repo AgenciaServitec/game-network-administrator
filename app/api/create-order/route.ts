@@ -1,11 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
 import { MercadoPagoConfig, Preference } from 'mercadopago';
 
 const client = new MercadoPagoConfig({ accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN! });
 
 export async function POST(req: NextRequest) {
     try {
+        const cookieStore = await cookies();
+        const supabase = createServerClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            {
+                cookies: {
+                    getAll() {
+                        return cookieStore.getAll();
+                    },
+                    setAll(cookiesToSet) {
+                        try {
+                            cookiesToSet.forEach(({ name, value, options }) =>
+                                cookieStore.set(name, value, options)
+                            );
+                        } catch (error) {
+                        }
+                    },
+                },
+            }
+        );
+
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+        if (authError || !user) {
+            return NextResponse.json({ error: 'No autorizado. Inicia sesión.' }, { status: 401 });
+        }
+
         const body = await req.json();
         const { playerId, nickname, productCode, price } = body;
 
@@ -23,16 +51,20 @@ export async function POST(req: NextRequest) {
                     nickname: nickname,
                     product_code: productCode,
                     price: price,
-                    status: 'pending'
+                    status: 'pending',
+                    user_id: user.id,
+                    user_email: user.email
                 }
             ])
             .select()
             .single();
 
-        if (error) throw error;
+        if (error) {
+            console.error('Error insertando en Supabase:', error);
+            throw error;
+        }
 
         const preference = new Preference(client);
-
         const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.imshop.pe';
 
         const mpResponse = await preference.create({

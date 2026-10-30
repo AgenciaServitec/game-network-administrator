@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { MercadoPagoConfig, Payment } from 'mercadopago';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 
 const client = new MercadoPagoConfig({ accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN! });
+
+const supabaseAdmin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export async function POST(req: NextRequest) {
     try {
@@ -25,7 +30,7 @@ export async function POST(req: NextRequest) {
         if (paymentInfo.status === 'approved') {
             const orderId = paymentInfo.external_reference;
 
-            const { data: order, error: updateError } = await supabase
+            const { data: order, error: updateError } = await supabaseAdmin
                 .from('orders')
                 .update({ status: 'processing' })
                 .eq('id', orderId)
@@ -34,7 +39,7 @@ export async function POST(req: NextRequest) {
                 .single();
 
             if (updateError || !order) {
-                console.log(`La orden ${orderId} ya fue procesada. Inyección doble bloqueada en seco.`);
+                console.log(`La orden ${orderId} ya fue procesada o bloqueada. Inyección doble prevenida.`);
                 return NextResponse.json({ success: true, message: 'Orden ya procesada' }, { status: 200 });
             }
 
@@ -79,14 +84,14 @@ export async function POST(req: NextRequest) {
             const apiData = await apiResponse.json();
 
             if (apiResponse.ok && apiData.success === true) {
-                await supabase.from('orders').update({
-                    status: 'paid',
+                await supabaseAdmin.from('orders').update({
+                    status: 'completed',
                     provider_status: `Codestore: Procesando (ID: ${apiData.data?.orderId || 'OK'})`
                 }).eq('id', orderId);
 
                 console.log(`¡Inyección Exitosa en Codestore!`);
             } else {
-                await supabase.from('orders').update({
+                await supabaseAdmin.from('orders').update({
                     status: 'failed_injection',
                     provider_status: `Error: ${apiData.message || 'Desconocido'}`
                 }).eq('id', orderId);

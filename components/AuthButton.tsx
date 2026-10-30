@@ -3,9 +3,11 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { LogIn, LogOut } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function AuthButton() {
     const [user, setUser] = useState<any>(null);
+    const router = useRouter();
 
     useEffect(() => {
         const checkSession = async () => {
@@ -33,6 +35,8 @@ export default function AuthButton() {
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
+        router.push('/login');
+        router.refresh();
     };
 
     if (user) {
