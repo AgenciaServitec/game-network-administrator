@@ -1,17 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --background: #09090b;
+  --background: #070609;
   --foreground: #fafafa;
 
-  --primary: #facc15;
-  --primary-foreground: #000000;
+  --primary: #ffb703;
+  --primary-foreground: #050505;
 
-  --card: #18181b;
-  --border: #27272a;
-  --muted: #a1a1aa;
-  --destructive: #ef4444;
-  --success: #10b981;
+  --crimson: #ff2a1f;
+  --cyan-tactical: #00e5ff;
+
+  --card: #110f16;
+  --border: #262230;
+  --muted: #9ca3af;
+  --destructive: #ff2a1f;
+  --success: #00e5ff;
 }
 
 @theme inline {
@@ -32,18 +35,58 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+.bg-halftone {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+.bg-halftone-crimson {
+  background-image: radial-gradient(rgba(255, 42, 31, 0.15) 1.5px, transparent 1.5px);
+  background-size: 12px 12px;
+}
+
+.bg-speedlines {
+  background: repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 14px,
+          rgba(255, 183, 3, 0.03) 14px,
+          rgba(255, 183, 3, 0.03) 28px
+  );
+}
+
+/* Texto hueco estilo Shonen / Urbano */
+.text-stroke-subtle {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.08);
+  color: transparent;
+}
+
+.text-stroke-crimson {
+  -webkit-text-stroke: 1.5px rgba(255, 42, 31, 0.4);
+  color: transparent;
+}
+
+.clip-tactical {
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+}
+
+.clip-btn {
+  clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
 }
 
 ::-webkit-scrollbar {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--background);
+  background: #070609;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
+  background: #ff2a1f;
+  border-radius: 0px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--muted);
+  background: #ffb703;
 }

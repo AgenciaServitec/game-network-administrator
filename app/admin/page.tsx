@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { LayoutDashboard, DollarSign, ShieldAlert, ArrowLeft, Gamepad2 } from 'lucide-react';
+import { LayoutDashboard, DollarSign, ShieldAlert, ArrowLeft, Gamepad2, Crosshair } from 'lucide-react';
 import Link from 'next/link';
 import OrdersTab from './OrdersTab';
 import GamesTab from './GamesTab';
@@ -133,41 +133,71 @@ export default function AdminDashboard() {
         return 'diamonds';
     };
 
+    const tabs = [
+        { id: 'orders' as const, label: 'Historial', Icon: LayoutDashboard },
+        { id: 'games' as const, label: 'Juegos', Icon: Gamepad2 },
+        { id: 'pricing' as const, label: 'Precios', Icon: DollarSign },
+    ];
+
     return (
-        <div className="min-h-screen bg-[#050505] selection:bg-primary selection:text-black font-sans pb-20">
-            <div className="border-b border-white/10 bg-[#0a0a0a] sticky top-0 z-50">
+        <div className="min-h-screen bg-[#070609] selection:bg-[#ff2a1f] selection:text-white font-sans pb-20 relative overflow-hidden bg-halftone">
+            <div className="absolute inset-0 bg-speedlines pointer-events-none z-0" />
+
+            {/* Barra superior */}
+            <div className="border-b-2 border-[#1f1a29] bg-[#0c0a10] sticky top-0 z-50">
                 <div className="max-w-[1400px] mx-auto px-4 h-16 flex items-center justify-between">
-                    <Link href="/" className="flex items-center gap-3 text-xs font-bold text-zinc-400 hover:text-primary transition-colors uppercase tracking-widest">
-                        <ArrowLeft className="w-4 h-4" /> Volver a la Tienda
+                    <Link href="/" className="group flex items-center gap-3 text-[11px] font-black text-zinc-300 hover:text-primary transition-colors uppercase tracking-[0.22em]">
+                        <ArrowLeft className="w-4 h-4 text-[#ff2a1f] stroke-[3] group-hover:-translate-x-2 transition-transform" /> Volver a la Tienda
                     </Link>
-                    <div className="flex items-center gap-2">
-                        <ShieldAlert className="w-4 h-4 text-red-500" />
-                        <span className="text-[10px] font-black text-red-500 uppercase tracking-[0.2em]">Acceso Maestro</span>
+                    <div className="flex items-center gap-2 bg-[#ff2a1f]/10 border border-[#ff2a1f] px-3 py-1 -skew-x-12">
+                        <span className="skew-x-12 flex items-center gap-2">
+                            <ShieldAlert className="w-4 h-4 text-[#ff2a1f]" />
+                            <span className="text-[10px] font-black text-[#ff2a1f] uppercase tracking-[0.25em]">Acceso Maestro</span>
+                        </span>
                     </div>
                 </div>
             </div>
 
-            <div className="bg-[#0a0a0a] border-b border-white/5 pt-12 pb-8 px-4 relative overflow-hidden">
+            {/* Encabezado */}
+            <div className="border-b-4 border-[#ff2a1f] pt-12 pb-8 px-4 relative overflow-hidden z-10">
+                <div className="absolute -top-4 left-4 lg:left-10 z-0 pointer-events-none select-none overflow-hidden">
+                    <span className="text-[6rem] sm:text-[9rem] lg:text-[12rem] font-black uppercase tracking-tighter leading-none text-stroke-subtle block">
+                        ADMIN
+                    </span>
+                </div>
+                <div className="absolute right-[5%] top-0 w-[320px] h-[320px] rounded-full blur-[130px] pointer-events-none z-0 bg-gradient-to-tr from-[#ff2a1f]/30 via-[#ffb703]/20 to-[#00e5ff]/10" />
+
                 <div className="max-w-[1400px] mx-auto relative z-10">
-                    <h1 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-8">
-                        CENTRO DE <span className="text-primary">MANDO</span>
+                    <div className="inline-flex items-center gap-3 bg-[#120e17] border-2 border-[#ff2a1f] px-4 py-1.5 mb-5 -skew-x-12 shadow-[4px_4px_0px_#ff2a1f]">
+                        <span className="skew-x-12 flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.25em] text-white">
+                            <Crosshair className="w-3.5 h-3.5 text-primary animate-spin" style={{ animationDuration: '8s' }} />
+                            PANEL — <span className="text-primary">CONTROL TOTAL</span>
+                        </span>
+                    </div>
+                    <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-[0.9] mb-8 drop-shadow-[5px_5px_0px_#000000]">
+                        CENTRO DE{' '}
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff2a1f] via-[#ff6b00] to-[#ffb703]">MANDO</span>
                     </h1>
 
-                    <div className="flex flex-wrap gap-2">
-                        <button onClick={() => setActiveTab('orders')} className={`px-6 py-3 text-xs font-black uppercase tracking-widest border transition-all ${activeTab === 'orders' ? 'bg-primary text-black border-primary shadow-[0_0_15px_rgba(250,204,21,0.2)]' : 'bg-[#050505] text-zinc-500 border-white/10 hover:text-white'}`}>
-                            <LayoutDashboard className="w-4 h-4 inline-block mr-2" /> Historial
-                        </button>
-                        <button onClick={() => setActiveTab('games')} className={`px-6 py-3 text-xs font-black uppercase tracking-widest border transition-all ${activeTab === 'games' ? 'bg-primary text-black border-primary shadow-[0_0_15px_rgba(250,204,21,0.2)]' : 'bg-[#050505] text-zinc-500 border-white/10 hover:text-white'}`}>
-                            <Gamepad2 className="w-4 h-4 inline-block mr-2" /> Juegos
-                        </button>
-                        <button onClick={() => setActiveTab('pricing')} className={`px-6 py-3 text-xs font-black uppercase tracking-widest border transition-all ${activeTab === 'pricing' ? 'bg-primary text-black border-primary shadow-[0_0_15px_rgba(250,204,21,0.2)]' : 'bg-[#050505] text-zinc-500 border-white/10 hover:text-white'}`}>
-                            <DollarSign className="w-4 h-4 inline-block mr-2" /> Precios
-                        </button>
+                    <div className="inline-flex flex-wrap gap-2 bg-[#070609] border-2 border-white/15 p-1.5">
+                        {tabs.map(({ id, label, Icon }) => (
+                            <button
+                                key={id}
+                                onClick={() => setActiveTab(id)}
+                                className={`px-6 py-3 text-[11px] md:text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 cursor-pointer ${
+                                    activeTab === id
+                                        ? 'bg-[#ff2a1f] text-white shadow-[2px_2px_0px_#ffb703]'
+                                        : 'text-zinc-500 hover:text-white'
+                                }`}
+                            >
+                                <Icon className="w-4 h-4" /> {label}
+                            </button>
+                        ))}
                     </div>
                 </div>
             </div>
 
-            <div className="max-w-[1400px] mx-auto px-4 mt-8">
+            <div className="max-w-[1400px] mx-auto px-4 mt-10 relative z-10">
                 {activeTab === 'orders' && (
                     <OrdersTab
                         orders={orders} loading={loading} searchTerm={searchTerm}

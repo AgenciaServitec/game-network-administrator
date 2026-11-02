@@ -1,13 +1,28 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Clock, Shield, ShoppingCart, Sparkles, TrendingUp, Zap } from 'lucide-react';
+import { Clock, Shield, ShoppingCart, Flame, TrendingUp, Zap, Crosshair, ChevronRight } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
-const heroImages = [
-  '/hero-ff.png',
-  '/hero-2.png',
-  '/hero-3.png'
+const heroSlides = [
+  {
+    src: '/hero.png',
+    codename: 'SYNDICATE // 01',
+    styleName: 'ESPECTRO CARMESÍ',
+    accentColor: 'from-[#ff2a1f] via-[#ff6b00] to-[#ffb703]',
+    glowColor: 'bg-[#ff2a1f]/25',
+    badgeBorder: 'border-[#ff2a1f]',
+    badgeText: 'text-[#ff2a1f]',
+  },
+  {
+    src: '/hero2.png',
+    codename: 'SYNDICATE // 02',
+    styleName: 'ORO FUNDIDO',
+    accentColor: 'from-[#ffb703] via-[#ff7b00] to-[#ff2a1f]',
+    glowColor: 'bg-[#ffb703]/25',
+    badgeBorder: 'border-primary',
+    badgeText: 'text-primary',
+  }
 ];
 
 export default function Home() {
@@ -16,13 +31,15 @@ export default function Home() {
   const [loadingGames, setLoadingGames] = useState(true);
 
   useEffect(() => {
-    const timer = setInterval(() => setCurrentSlide((prev) => (prev + 1) % heroImages.length), 4000);
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 5000);
     return () => clearInterval(timer);
   }, []);
 
   useEffect(() => {
     const fetchGames = async () => {
-      const { data, error } = await supabase
+      const { data } = await supabase
           .from('games_config')
           .select('*')
           .eq('is_active', true)
@@ -34,138 +51,199 @@ export default function Home() {
     fetchGames();
   }, []);
 
+  const activeSlide = heroSlides[currentSlide];
+
   return (
-      <div className="w-full bg-[#050505] selection:bg-primary selection:text-black font-sans">
-        <div className="w-full bg-[#0a0a0a] border-b border-white/5 text-muted py-2.5 hidden md:block z-50 relative">
-          <div className="max-w-7xl mx-auto px-4 flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em]">
+      <div className="w-full bg-[#070609] selection:bg-[#ff2a1f] selection:text-white font-sans">
+
+        <div className="w-full bg-[#0c0a10] border-b-2 border-[#1f1a29] py-2 hidden md:block z-50 relative">
+          <div className="max-w-7xl mx-auto px-4 flex items-center justify-between text-[11px] font-black uppercase tracking-[0.22em]">
             <div className="flex items-center gap-8">
-              <span className="flex items-center gap-2 hover:text-primary transition-colors"><Zap className="w-3.5 h-3.5 text-primary" /> Entrega Instántanea</span>
-              <span className="flex items-center gap-2 hover:text-primary transition-colors"><Shield className="w-3.5 h-3.5 text-primary" /> Protección Anti-Ban</span>
+            <span className="flex items-center gap-2 text-zinc-300">
+              <Flame className="w-3.5 h-3.5 text-[#ff2a1f] fill-[#ff2a1f]" />
+              INYECCIÓN DIRECTA AL ID
+            </span>
+              <span className="flex items-center gap-2 text-zinc-300">
+              <Shield className="w-3.5 h-3.5 text-[#00e5ff]" />
+              SISTEMA ANTI-BAN <strong className="text-[#00e5ff]">VERIFICADO</strong>
+            </span>
             </div>
           </div>
         </div>
 
-        <section className="relative w-full border-b border-white/10 overflow-hidden min-h-[90vh] lg:min-h-[85vh] flex items-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-900 via-[#050505] to-[#050505]">
-          <div className="absolute inset-0 z-0 pointer-events-none hidden lg:block">
-            <div className="absolute right-0 top-0 w-[55%] h-full bg-primary/20 blur-3xl -translate-x-10 opacity-50" />
-            <div className="absolute right-0 top-0 w-[55%] h-full bg-primary shadow-[-20px_0_50px_rgba(250,204,21,0.15)]" style={{ clipPath: 'polygon(35% 0, 100% 0, 100% 100%, 10% 100%, 25% 60%, 5% 60%, 25% 25%, 10% 25%)' }} />
-          </div>
-          <div className="absolute inset-0 z-0 pointer-events-none lg:hidden">
-            <div className="absolute bottom-0 w-full h-[65%] bg-primary shadow-[0_-20px_50px_rgba(250,204,21,0.2)]" style={{ clipPath: 'polygon(0 100%, 100% 100%, 100% 15%, 70% 20%, 80% 5%, 30% 10%, 40% 0, 0 10%)' }} />
+        <section className="relative w-full min-h-[92vh] lg:min-h-[88vh] flex items-center overflow-hidden border-b-4 border-[#ff2a1f] bg-[#070609] bg-halftone">
+
+          <div className="absolute inset-0 bg-speedlines pointer-events-none z-0" />
+
+          <div className="absolute -top-6 left-4 lg:left-10 z-0 pointer-events-none select-none overflow-hidden">
+          <span className="text-[7rem] sm:text-[11rem] lg:text-[15rem] font-black uppercase tracking-tighter leading-none text-stroke-subtle block">
+            CRIMINAL
+          </span>
           </div>
 
-          <div className="max-w-7xl mx-auto px-4 w-full relative z-20 h-full flex flex-col justify-center pt-10 pb-40 lg:py-0">
-            <div className="w-full lg:w-1/2 flex flex-col items-start text-left">
-              <h1 className="text-[5rem] md:text-[6.5rem] lg:text-[7.5rem] font-black text-white uppercase tracking-tighter leading-[0.85] mb-6 drop-shadow-2xl">
-                TODO <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-yellow-400 to-yellow-600 drop-shadow-[0_0_30px_rgba(250,204,21,0.3)] lg:text-foreground lg:bg-none lg:drop-shadow-none">
-                                DIGITAL
-                            </span>
+          <div className="absolute right-[5%] lg:right-[12%] bottom-[10%] w-[380px] sm:w-[520px] h-[380px] sm:h-[520px] rounded-full blur-[130px] pointer-events-none z-0 transition-colors duration-1000 bg-gradient-to-tr from-[#ff2a1f]/35 via-[#ffb703]/25 to-[#00e5ff]/10" />
+
+          <div className="max-w-7xl mx-auto px-4 w-full relative z-20 pt-10 pb-64 lg:py-16">
+            <div className="w-full lg:w-[52%] flex flex-col items-start text-left">
+
+              <div className="inline-flex items-center gap-3 bg-[#120e17] border-2 border-[#ff2a1f] px-4 py-1.5 mb-6 -skew-x-12 shadow-[4px_4px_0px_#ff2a1f]">
+              <span className="skew-x-12 flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.25em] text-white">
+                <Crosshair className="w-3.5 h-3.5 text-primary animate-spin" style={{ animationDuration: '8s' }} />
+                {activeSlide.codename} — <span className="text-primary">{activeSlide.styleName}</span>
+              </span>
+              </div>
+              <h1 className="text-[4.2rem] sm:text-[5.5rem] lg:text-[6.8rem] font-black text-white uppercase tracking-tighter leading-[0.86] mb-6 drop-shadow-[6px_6px_0px_#000000]">
+                DOMINA <br />
+                <span className={`text-transparent bg-clip-text bg-gradient-to-r ${activeSlide.accentColor}`}>
+                EL FUEGO
+              </span>
               </h1>
-              <p className="text-zinc-400 text-lg md:text-xl font-medium max-w-md mb-10 leading-relaxed">
-                Recargas oficiales sin esperas. Ingresa tu ID, completa el pago de forma segura y <strong className="text-white font-bold">domina tu juego al instante.</strong>
-              </p>
-              <div className="flex flex-col sm:flex-row gap-5 w-full sm:w-auto">
-                <a href="#catalogo" className="group relative flex items-center justify-center gap-3 bg-primary text-black font-black text-lg px-8 py-4 uppercase tracking-widest overflow-hidden rounded-sm transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(250,204,21,0.4)]">
-                  <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-                  <span className="relative z-10 flex items-center gap-3"><Sparkles className="w-5 h-5" /> Explorar Tienda</span>
+
+              <div className="pl-5 border-l-4 border-primary mb-10 max-w-lg bg-black/40 py-2 pr-4 backdrop-blur-xs">
+                <p className="text-zinc-300 text-base md:text-lg font-medium leading-relaxed">
+                  Recargas oficiales al instante. Ingresa tu ID de jugador, desbloquea diamantes sin esperas y <strong className="text-white font-black underline decoration-[#ff2a1f] decoration-2 underline-offset-4">haz arder la partida.</strong>
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-5 w-full sm:w-auto">
+                <a
+                    href="#catalogo"
+                    className="group relative inline-flex items-center justify-center gap-3 bg-primary hover:bg-[#ffc42e] text-black font-black text-base md:text-lg px-9 py-4 uppercase tracking-[0.18em] border-2 border-black shadow-[6px_6px_0px_#ff2a1f] hover:shadow-[2px_2px_0px_#ff2a1f] hover:translate-x-1 hover:translate-y-1 transition-all"
+                >
+                  <Flame className="w-5 h-5 fill-black group-hover:scale-110 transition-transform" />
+                  <span>Recargar Ahora</span>
+                  <ChevronRight className="w-5 h-5 stroke-[3]" />
                 </a>
-              </div>
-              <div className="mt-12 flex flex-wrap gap-4 w-full max-w-lg">
-                <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-4 flex-1 flex items-center gap-4 shadow-2xl">
-                  <div className="bg-primary/10 p-2 rounded-lg"><TrendingUp className="w-6 h-6 text-primary" /></div>
-                  <div>
-                    <p className="text-2xl font-black text-white leading-none">10K+</p>
-                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mt-1">Recargas</p>
-                  </div>
+
+                <div className="flex items-center gap-2 bg-[#110f16] border-2 border-white/15 p-1.5 self-start sm:self-auto">
+                  {heroSlides.map((slide, idx) => (
+                      <button
+                          key={slide.src}
+                          onClick={() => setCurrentSlide(idx)}
+                          className={`px-3 py-2 text-[10px] font-black uppercase tracking-widest transition-all cursor-pointer ${
+                              currentSlide === idx
+                                  ? 'bg-[#ff2a1f] text-white shadow-[2px_2px_0px_#ffb703]'
+                                  : 'text-zinc-500 hover:text-white'
+                          }`}
+                      >
+                        0{idx + 1}
+                      </button>
+                  ))}
                 </div>
-                <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-4 flex-1 flex items-center gap-4 shadow-2xl">
-                  <div className="bg-primary/10 p-2 rounded-lg"><Shield className="w-6 h-6 text-primary" /></div>
-                  <div>
-                    <p className="text-2xl font-black text-white leading-none">100%</p>
-                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mt-1">Garantía</p>
-                  </div>
-                </div>
               </div>
+
             </div>
           </div>
 
-          <div className="absolute bottom-0 right-0 w-full lg:w-[55%] h-[60%] lg:h-[90%] z-10 pointer-events-none flex justify-center lg:justify-end">
-            {heroImages.map((src, index) => (
+          <div className=" absolute bottom-0 right-0 w-full lg:w-[54%] h-[58%] sm:h-[68%] lg:h-[96%] z-10 pointer-events-none flex justify-center lg:justify-end items-end">
+            {heroSlides.map((slide, index) => (
                 <img
-                    key={src}
-                    src={src}
-                    alt={`Personaje ${index + 1}`}
-                    className={`absolute bottom-0 w-[95%] lg:w-[110%] h-[100%] object-contain object-bottom origin-bottom drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)] transition-all duration-1000 ease-out ${currentSlide === index ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-8'}`}
+                    key={slide.src}
+                    src={slide.src}
+                    alt={slide.styleName}
+                    className={`absolute bottom-0 w-auto max-w-[95%] lg:max-w-[105%] h-full object-contain object-bottom origin-bottom transition-all duration-700 ease-out drop-shadow-[0_15px_35px_rgba(0,0,0,0.95)] ${
+                        currentSlide === index
+                            ? 'opacity-100 scale-100 translate-y-0 rotate-0'
+                            : 'opacity-0 scale-90 translate-y-6 rotate-1'
+                    }`}
                 />
             ))}
-            <div className="absolute bottom-0 left-0 w-full h-8 bg-black/60 blur-xl" />
+
+            <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-[#070609] via-[#070609]/85 to-transparent z-20" />
           </div>
         </section>
 
         <section id="catalogo" className="max-w-7xl mx-auto px-4 py-24 relative z-10">
-          <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
+
+          <div className="mb-14 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b-2 border-white/10 pb-6">
             <div>
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-8 h-1 bg-primary rounded-full"></div>
-                <p className="text-primary font-bold uppercase tracking-[0.2em] text-xs">Colección Premium</p>
+              <div className="inline-flex items-center gap-2 bg-[#ff2a1f]/15 border border-[#ff2a1f] px-3 py-1 mb-3 -skew-x-12">
+              <span className="skew-x-12 text-[#ff2a1f] font-black uppercase tracking-[0.25em] text-[10px]">
+                ARSENAL OFICIAL
+              </span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter leading-none">
-                Productos <br className="md:hidden" /> Destacados
+              <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-none">
+                SELECCIONA TU <span className="text-primary">JUEGO</span>
               </h2>
             </div>
+            <p className="text-xs font-mono uppercase tracking-widest text-zinc-400">
+              [ ENTREGA EN SEGUNDOS VÍA ID ]
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {loadingGames ? (
-                <div className="col-span-full py-10 flex flex-col items-center justify-center">
-                  <p className="text-zinc-500 text-sm font-bold uppercase tracking-widest animate-pulse">Sincronizando catálogo...</p>
+                <div className="col-span-full py-16 flex flex-col items-center justify-center border-2 border-dashed border-white/10 bg-[#110f16]">
+                  <p className="text-primary text-xs font-black uppercase tracking-[0.3em] animate-pulse">
+                    CARGANDO ARSENAL DE JUEGOS...
+                  </p>
                 </div>
-            ) : games.map((game) => (
-                <Link key={game.slug} href={`/game/${game.slug}`} className="block h-full group">
-                  <div className="relative h-full flex flex-col bg-[#0a0a0a] rounded-2xl border border-white/10 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(250,204,21,0.1)] hover:border-primary/50">
-                    <div className="absolute inset-0 bg-gradient-to-b from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            ) : (
+                games.map((game) => (
+                    <Link key={game.slug} href={`/game/${game.slug}`} className="block h-full group">
+                      <div className="relative h-full flex flex-col bg-[#110f16] border-2 border-white/20 transition-all duration-200 group-hover:-translate-x-1.5 group-hover:-translate-y-1.5 shadow-[6px_6px_0px_#1f1a29] group-hover:shadow-[8px_8px_0px_#ff2a1f] group-hover:border-primary overflow-hidden">
 
-                    <div className="absolute top-4 left-4 flex gap-2 z-20">
-                                    <span className="bg-black/80 backdrop-blur text-primary text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md border border-primary/20 shadow-lg">
-                                        💎 OFICIAL
-                                    </span>
-                    </div>
-
-                    <div className="w-full h-56 flex items-center justify-center p-8 relative z-10 bg-zinc-900/50">
-                      <img
-                          src={game.image_url}
-                          alt={game.name}
-                          className="w-full h-full object-contain drop-shadow-2xl group-hover:scale-110 transition-transform duration-500 ease-out"
-                      />
-                    </div>
-
-                    <div className="p-6 relative z-10 flex-1 flex flex-col bg-[#0a0a0a]">
-                      <p className="text-xs text-primary font-bold uppercase tracking-widest mb-1">{game.publisher}</p>
-                      <h3 className="text-2xl font-black text-white tracking-tighter mb-4 group-hover:text-primary transition-colors">
-                        {game.name}
-                      </h3>
-
-                      <div className="mt-auto flex flex-col gap-3 pt-4 border-t border-white/5">
-                        <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
-                          <span className="text-zinc-500 flex items-center gap-1.5"><Zap className="w-3.5 h-3.5 text-primary"/> Entrega</span>
-                          <span className="text-green-400 bg-green-400/10 px-2 py-0.5 rounded text-right">AUTOMÁTICA</span>
+                        <div className="absolute top-3 left-3 z-20">
+                    <span className="inline-block bg-black border-2 border-primary text-primary text-[10px] font-black uppercase tracking-widest px-2.5 py-1 -skew-x-12 shadow-[3px_3px_0px_#ff2a1f]">
+                      <span className="skew-x-12 inline-block">🔥 RECARGA ID</span>
+                    </span>
                         </div>
-                        <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
-                          <span className="text-zinc-500 flex items-center gap-1.5"><Clock className="w-3.5 h-3.5 text-primary"/> Tiempo</span>
-                          <span className="text-white text-right">INSTANTÁNEO</span>
+
+                        <div className="w-full h-56 flex items-center justify-center p-6 relative z-10 bg-[#0a080d] bg-halftone-crimson border-b-2 border-white/10 overflow-hidden">
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#ff2a1f]/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                          <img
+                              src={game.image_url}
+                              alt={game.name}
+                              className="w-full h-full object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.9)] group-hover:scale-110 group-hover:-rotate-2 transition-transform duration-300 ease-out relative z-10"
+                          />
+                        </div>
+
+                        <div className="p-6 relative z-10 flex-1 flex flex-col bg-[#110f16]">
+                          <p className="text-[10px] text-[#ff2a1f] font-black uppercase tracking-[0.25em] mb-1">
+                            {game.publisher || 'OFICIAL'}
+                          </p>
+                          <h3 className="text-2xl font-black text-white uppercase tracking-tighter mb-5 group-hover:text-primary transition-colors">
+                            {game.name}
+                          </h3>
+
+                          <div className="mt-auto flex flex-col gap-2.5 pt-4 border-t-2 border-white/10">
+                            <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
+                        <span className="text-zinc-400 flex items-center gap-1.5">
+                          <Zap className="w-3.5 h-3.5 text-primary" /> Sistema
+                        </span>
+                              <span className="text-[#00e5ff] bg-[#00e5ff]/10 border border-[#00e5ff]/30 px-2 py-0.5">
+                          AUTOMÁTICO
+                        </span>
+                            </div>
+                            <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
+                        <span className="text-zinc-400 flex items-center gap-1.5">
+                          <Clock className="w-3.5 h-3.5 text-[#ff2a1f]" /> Velocidad
+                        </span>
+                              <span className="text-white font-mono">INSTANTÁNEO</span>
+                            </div>
+                          </div>
+
+                          <div className="mt-5 w-full bg-white/5 group-hover:bg-primary text-zinc-300 group-hover:text-black font-black text-xs uppercase tracking-[0.2em] py-2.5 px-4 flex items-center justify-between transition-colors border border-white/10 group-hover:border-black">
+                            <span>ENTRAR</span>
+                            <ChevronRight className="w-4 h-4 stroke-[3] group-hover:translate-x-1 transition-transform" />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                </Link>
-            ))}
+                    </Link>
+                ))
+            )}
 
-            <div className="h-full min-h-[350px] relative group cursor-not-allowed">
-              <div className="relative h-full flex flex-col bg-[#050505] rounded-2xl border-2 border-dashed border-white/10 p-6 justify-center items-center opacity-60">
-                <div className="bg-white/5 p-4 rounded-full mb-4"><ShoppingCart className="w-8 h-8 text-zinc-500" /></div>
-                <h3 className="text-lg font-black text-white tracking-tighter mb-1 text-center">NUEVOS TÍTULOS</h3>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-primary text-center">Próximamente</p>
+            <div className="h-full min-h-[360px] relative select-none">
+              <div className="relative h-full flex flex-col bg-[#0b090e] border-2 border-dashed border-white/15 p-6 justify-center items-center opacity-70 bg-halftone">
+                <div className="bg-[#ff2a1f]/10 border-2 border-[#ff2a1f]/40 p-4 mb-4 -skew-x-6">
+                  <ShoppingCart className="w-8 h-8 text-[#ff2a1f] skew-x-6" />
+                </div>
+                <h3 className="text-lg font-black text-white uppercase tracking-tighter mb-1 text-center">
+                  NUEVOS TÍTULOS
+                </h3>
+                <p className="text-[10px] font-black uppercase tracking-[0.25em] text-primary text-center">
+                  PRÓXIMAMENTE
+                </p>
               </div>
             </div>
           </div>

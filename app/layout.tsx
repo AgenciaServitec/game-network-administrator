@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     },
 };
 
-const MAINTENANCE_MODE = true;
+const MAINTENANCE_MODE = false;
 
 export default function RootLayout({
                                        children,

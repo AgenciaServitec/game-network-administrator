@@ -42,14 +42,15 @@ export default function AuthButton() {
     if (user) {
         return (
             <div className="flex items-center gap-3">
-                <Link href="/dashboard" className="flex items-center gap-2 bg-white/5 border border-white/10 hover:border-primary/50 px-3 py-1.5 rounded-lg transition-all">
+                <Link href="/admin" className="group flex bg-[#110f16] border-2 border-white/15 hover:border-primary px-5 py-2 -skew-x-12 transition-all duration-150 hover:-translate-y-0.5 shadow-[3px_3px_0px_#1f1a29] hover:shadow-[4px_4px_0px_#ff2a1f]"
+                >
                     <img
                         src={user.user_metadata.avatar_url}
                         alt="Avatar"
-                        className="w-6 h-6 rounded-full border border-primary/30"
+                        className="w-5 h-5 rounded-full border border-primary/30"
                     />
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-300 hidden sm:block">
-                        Mis Recargas
+                    <span className="text-[12px] font-bold uppercase tracking-widest text-zinc-300 hidden sm:block">
+                        ADMIN
                     </span>
                 </Link>
                 <button
