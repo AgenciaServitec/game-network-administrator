@@ -22,7 +22,7 @@ export default function GamePage() {
     const [error, setError] = useState('');
     const [packages, setPackages] = useState<Package[]>([]);
     const [loadingPackages, setLoadingPackages] = useState(true);
-    const [gameExists, setGameExists] = useState(true); // NUEVO: Estado para el mantenimiento dinámico
+    const [gameExists, setGameExists] = useState(true);
 
     const [activeTab, setActiveTab] = useState<'diamonds' | 'memberships'>('diamonds');
 
