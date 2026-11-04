@@ -1,8 +1,7 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type {Metadata} from "next";
+import {Geist, Geist_Mono} from "next/font/google";
 import "./globals.css";
 import LayoutWrapper from "@/components/LayoutWrapper";
-import Maintenance from "@/components/Maintenance";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -22,8 +21,6 @@ export const metadata: Metadata = {
     },
 };
 
-const MAINTENANCE_MODE = true;
-
 export default function RootLayout({
                                        children,
                                    }: Readonly<{
@@ -35,11 +32,7 @@ export default function RootLayout({
             className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
         >
         <body className="min-h-full flex flex-col bg-[#050505] text-zinc-200 selection:bg-yellow-400 selection:text-black">
-        {MAINTENANCE_MODE ? (
-            <Maintenance />
-        ) : (
-            <LayoutWrapper>{children}</LayoutWrapper>
-        )}
+        <LayoutWrapper>{children}</LayoutWrapper>
         </body>
         </html>
     );
